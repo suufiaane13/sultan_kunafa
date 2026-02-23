@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  /* Sultan Kunafa — palette pro (chocolat, or, crème) */
+  --color-dark: #0f0804;
+  --color-dark-muted: #1a0f0a;
+  --color-cream: #faf6f1;
+  --color-cream-dark: #f0e8df;
+  --color-gold: #c99b2d;
+  --color-gold-light: #e4b84a;
+  --color-gold-dark: #a67c1e;
+  --color-gold-muted: rgba(201, 155, 45, 0.12);
+  --color-pistachio: #8ab86a;
+  --color-surface: #ffffff;
+  --color-border: rgba(201, 155, 45, 0.18);
+  /* Section toujours sombre (Hero, Footer, en-têtes) — inchangé en mode clair/sombre */
+  --color-inverse-bg: #0f0804;
+  --color-on-inverse: #faf6f1;
+  --font-display: "Playfair Display", serif;
+  --font-body: "Poppins", sans-serif;
+  --shadow-card: 0 1px 3px rgba(15, 8, 4, 0.06), 0 4px 12px rgba(15, 8, 4, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(15, 8, 4, 0.08), 0 12px 28px rgba(15, 8, 4, 0.06);
+  --shadow-nav: 0 1px 0 rgba(201, 155, 45, 0.08);
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+/* Mode sombre : basé sur l'heure au Maroc (voir useMoroccoTheme) */
+.dark {
+  --color-cream: #1a0f0a;
+  --color-cream-dark: #251a12;
+  --color-dark: #faf6f1;
+  --color-dark-muted: #e8e0d8;
+  --color-surface: #251a12;
+  --color-border: rgba(201, 155, 45, 0.25);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.25), 0 12px 28px rgba(0, 0, 0, 0.2);
+  --shadow-nav: 0 1px 0 rgba(201, 155, 45, 0.15);
+}
+
+/* Cartes fondateurs (About) : fond sombre forcé en mode sombre */
+.dark .founder-card {
+  background-color: var(--color-surface) !important;
+  border-color: rgba(201, 155, 45, 0.35);
+}
+.dark .founder-card .founder-initial {
+  background: linear-gradient(145deg, rgba(201, 155, 45, 0.4) 0%, rgba(15, 8, 4, 0.9) 100%);
+  box-shadow: inset 0 0 0 2px rgba(201, 155, 45, 0.5), 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #faf6f1;
+}
+.founder-avatar {
+  border: 3px solid rgba(201, 155, 45, 0.5);
+  box-shadow: 0 8px 32px rgba(15, 8, 4, 0.25), 0 0 0 1px rgba(201, 155, 45, 0.2);
+}
+.dark .founder-avatar {
+  border-color: rgba(201, 155, 45, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(201, 155, 45, 0.25);
+}
+
+/* Carte article dans le panier : fond sombre forcé en mode sombre */
+.dark .cart-item-card {
+  background-color: var(--color-surface) !important;
+  border-color: rgba(201, 155, 45, 0.35);
+}
+.dark .cart-item-card .cart-item-qty {
+  border-color: rgba(201, 155, 45, 0.4);
+}
+
+/* Carte Google Maps : rendu sombre type « night mode » */
+.map-dark {
+  background: #0f0f12;
+}
+.map-dark .map-dark-iframe {
+  filter: brightness(0.4) contrast(1.25) saturate(0.7) hue-rotate(-5deg);
+}
+.map-dark .map-dark-iframe:hover {
+  filter: brightness(0.5) contrast(1.2) saturate(0.75) hue-rotate(-5deg);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable; /* Réserve l’espace de la scrollbar pour éviter le décalage au clic */
+  }
+  body {
+    font-family: var(--font-body);
+    color: var(--color-dark);
+    background-color: var(--color-cream);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@utility animate-float {
+  animation: float 2.5s ease-in-out infinite;
+}
+
+/* Shake léger sur l’icône panier après ajout */
+@keyframes cart-bump {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  50% { transform: scale(0.95); }
+  75% { transform: scale(1.08); }
+}
+
+.cart-bump {
+  animation: cart-bump 0.45s ease-out;
+}

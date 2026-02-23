@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.cursor/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional: generated assets (décommenter si vous préférez les régénérer en CI)
+# public/qr-menu.png
+# public/qr-menu.svg
+# public/**/*.webp
+
+# Netlify (CLI local)
+.netlify/
+
+# Cache & temp
+.cache/
+*.tmp
+.temp/
