@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Info, Users, MapPin } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
@@ -5,6 +6,9 @@ import { site } from "@/content/site";
 
 export function About() {
   const { t } = useLocale();
+  const [avatar1Loaded, setAvatar1Loaded] = useState(false);
+  const [avatar2Loaded, setAvatar2Loaded] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
   return (
     <>
       <header className="bg-inverse-bg py-16 text-center text-on-inverse">
@@ -46,15 +50,19 @@ export function About() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.2 }}
             >
-              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gold/20 ring-2 ring-gold/10 dark:border-gold/30 dark:ring-gold/20 sm:h-24 sm:w-24">
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gold/20 ring-2 ring-gold/10 dark:border-gold/30 dark:ring-gold/20 sm:h-24 sm:w-24">
+                {!avatar1Loaded && (
+                  <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
+                )}
                 <img
                   src="/avatar-ahmed.png"
                   alt=""
-                  className="h-full w-full object-cover object-center scale-110"
+                  className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar1Loaded ? "opacity-100" : "opacity-0"} scale-110`}
                   width={96}
                   height={96}
                   loading="lazy"
                   decoding="async"
+                  onLoad={() => setAvatar1Loaded(true)}
                 />
               </div>
               <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
@@ -68,15 +76,19 @@ export function About() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
             >
-              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gold/20 ring-2 ring-gold/10 dark:border-gold/30 dark:ring-gold/20 sm:h-24 sm:w-24">
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gold/20 ring-2 ring-gold/10 dark:border-gold/30 dark:ring-gold/20 sm:h-24 sm:w-24">
+                {!avatar2Loaded && (
+                  <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
+                )}
                 <img
                   src="/avatar-haroun.png"
                   alt=""
-                  className="h-full w-full object-cover"
+                  className={`h-full w-full object-cover transition-opacity duration-300 ${avatar2Loaded ? "opacity-100" : "opacity-0"}`}
                   width={96}
                   height={96}
                   loading="lazy"
                   decoding="async"
+                  onLoad={() => setAvatar2Loaded(true)}
                 />
               </div>
               <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
@@ -100,13 +112,17 @@ export function About() {
         </h2>
         <div className="map-dark mt-6 overflow-hidden rounded-2xl border border-gold/20 shadow-xl ring-1 ring-black/20 dark:border-gold/30 dark:ring-gold/10">
           <div className="relative aspect-[16/10] w-full min-h-[240px] sm:aspect-video">
+            {!mapLoaded && (
+              <div className="absolute inset-0 animate-pulse bg-gold/15 dark:bg-gold/20" aria-hidden />
+            )}
             <iframe
               src={site.contact.mapEmbedUrl}
               title={t("aboutPage.locationTitle")}
-              className="map-dark-iframe absolute inset-0 h-full w-full border-0 transition-[filter] duration-300"
+              className={`map-dark-iframe absolute inset-0 h-full w-full border-0 transition-opacity duration-300 ${mapLoaded ? "opacity-100" : "opacity-0"}`}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
+              onLoad={() => setMapLoaded(true)}
             />
           </div>
           <a

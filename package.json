@@ -8,7 +8,8 @@
     "build": "npm run optimize-images && tsc -b && vite build",
     "optimize-images": "node scripts/optimize-images.js",
     "preview": "vite preview",
-    "qr": "node scripts/generate-qr-menu.js"
+    "qr": "node scripts/generate-qr-menu.js",
+    "deploy": "git push origin main"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",

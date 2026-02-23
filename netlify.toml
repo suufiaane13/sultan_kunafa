@@ -1,10 +1,16 @@
-# Sultan Kunafa — déploiement Netlify
-[build]
-  command = "npm run build"
-  publish = "dist"
+# Netlify — Sultan Kunafa
+# Chaque push sur la branche connectée déclenche un build et un déploiement.
 
-# SPA : toutes les routes renvoient vers index.html (React Router)
+[build]
+  command    = "npm run build"
+  publish    = "dist"
+  base       = "/"
+
+# Redirection SPA : toutes les routes → index.html (React Router)
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from  = "/*"
+  to    = "/index.html"
   status = 200
+
+# Variables d’environnement optionnelles (à définir dans Netlify UI si besoin)
+# NODE_VERSION = "20"
