@@ -31,6 +31,18 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", check);
   }, [location.pathname]);
 
+  // Bloquer le scroll du body quand le menu (drawer) est ouvert
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (drawerOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [drawerOpen]);
+
   const headerOverHero = location.pathname === "/" && overHero;
 
   return (

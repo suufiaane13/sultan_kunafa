@@ -109,6 +109,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(t);
   }, [cartBump]);
 
+  // Bloquer le scroll du body quand le panier est ouvert
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isOpen]);
+
   const updateQuantity = useCallback((id: string, delta: number) => {
     setItems((prev) => {
       const next = prev.map((i) =>
