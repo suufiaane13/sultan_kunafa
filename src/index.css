@@ -102,6 +102,45 @@
   }
 }
 
+/* Scrollbar pro — palette Sultan Kunafa (or / crème), fin et discret */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 155, 45, 0.5) rgba(201, 155, 45, 0.08);
+}
+.dark html {
+  scrollbar-color: rgba(201, 155, 45, 0.55) rgba(201, 155, 45, 0.15);
+}
+/* WebKit (Chrome, Safari, Edge) */
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+html::-webkit-scrollbar-track {
+  background: rgba(201, 155, 45, 0.06);
+  border-radius: 0;
+}
+html::-webkit-scrollbar-thumb {
+  background: rgba(201, 155, 45, 0.35);
+  border-radius: 5px;
+  border: 2px solid var(--color-cream);
+}
+html::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 155, 45, 0.55);
+}
+html::-webkit-scrollbar-thumb:active {
+  background: var(--color-gold);
+}
+.dark html::-webkit-scrollbar-track {
+  background: rgba(201, 155, 45, 0.1);
+}
+.dark html::-webkit-scrollbar-thumb {
+  background: rgba(201, 155, 45, 0.4);
+  border-color: var(--color-surface);
+}
+.dark html::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 155, 45, 0.6);
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
