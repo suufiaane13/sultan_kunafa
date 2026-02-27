@@ -9,19 +9,23 @@
     "optimize-images": "node scripts/optimize-images.js",
     "preview": "vite preview",
     "qr": "node scripts/generate-qr-menu.js",
+    "qr:instagram": "node scripts/generate-qr-instagram.js",
     "deploy": "git push origin main"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",
     "gsap": "^3.14.2",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.0.1"
+    "react-router-dom": "^7.0.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.0.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",

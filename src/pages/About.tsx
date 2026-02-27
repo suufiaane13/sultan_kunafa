@@ -8,6 +8,7 @@ export function About() {
   const { t } = useLocale();
   const [avatar1Loaded, setAvatar1Loaded] = useState(false);
   const [avatar2Loaded, setAvatar2Loaded] = useState(false);
+  const [avatar3Loaded, setAvatar3Loaded] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
   return (
     <>
@@ -43,7 +44,7 @@ export function About() {
           <p className="mt-4 text-center text-dark/80 md:max-w-2xl md:mx-auto">
             {t("aboutPage.foundersIntro")}
           </p>
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-8 md:gap-10">
+          <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-8 md:gap-10 lg:grid-cols-3">
             <motion.div
               className="founder-card flex flex-col items-center rounded-2xl border border-gold/20 bg-white p-6 text-center shadow-lg sm:p-8"
               initial={{ opacity: 0, y: 16 }}
@@ -95,6 +96,32 @@ export function About() {
                 {t("aboutPage.founder2Name")}
               </h3>
               <p className="mt-1 text-sm font-medium text-gold sm:text-base">{t("aboutPage.founder2Role")}</p>
+            </motion.div>
+            <motion.div
+              className="founder-card flex flex-col items-center rounded-2xl border border-gold/20 bg-white p-6 text-center shadow-lg sm:p-8"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+            >
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gold/20 ring-2 ring-gold/10 dark:border-gold/30 dark:ring-gold/20 sm:h-24 sm:w-24">
+                {!avatar3Loaded && (
+                  <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
+                )}
+                <img
+                  src="/avatar-soufiane.png"
+                  alt=""
+                  className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar3Loaded ? "opacity-100" : "opacity-0"}`}
+                  width={96}
+                  height={96}
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={() => setAvatar3Loaded(true)}
+                />
+              </div>
+              <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
+                {t("aboutPage.founder3Name")}
+              </h3>
+              <p className="mt-1 text-sm font-medium text-gold sm:text-base">{t("aboutPage.founder3Role")}</p>
             </motion.div>
           </div>
         </div>

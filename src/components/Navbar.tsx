@@ -48,14 +48,13 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-30 border-b backdrop-blur-md transition-colors supports-[backdrop-filter]:bg-opacity-60 ${
+        className={`sticky top-0 z-30 border-b shadow-[var(--shadow-nav)] backdrop-blur-md transition-colors duration-200 ${
           headerOverHero
-            ? "border-gold/20 bg-[var(--color-inverse-bg)]/80 text-on-inverse"
-            : "border-[var(--color-border)] bg-[var(--color-cream)]/70 text-dark supports-[backdrop-filter]:bg-[var(--color-cream)]/60"
+            ? "border-gold/20 bg-[var(--color-inverse-bg)]/90 text-[var(--color-on-inverse)]"
+            : "border-gold/20 bg-[var(--color-cream)]/95 text-dark dark:border-gold/30 dark:bg-[var(--color-cream-dark)]/95"
         }`}
-        style={{ boxShadow: "var(--shadow-nav, 0 1px 0 rgba(201,155,45,0.06))" }}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 md:gap-6 md:py-3.5 lg:px-8">
           <Link
             to="/"
             onClick={() => {
@@ -63,12 +62,12 @@ export function Navbar() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex shrink-0 items-center transition-opacity hover:opacity-90 focus:outline-none"
+            className="flex shrink-0 items-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] rounded-lg"
             aria-label="Sultan Kunafa"
           >
             <img
               src="/logo.png"
-              alt="Sultan Kunafa"
+              alt=""
               className="h-9 w-9 object-contain sm:h-10 sm:w-10 md:h-11 md:w-11"
               width={44}
               height={44}
@@ -78,7 +77,7 @@ export function Navbar() {
           </Link>
 
           <nav
-            className="hidden items-center gap-1 md:flex"
+            className="hidden items-center gap-0.5 md:flex"
             aria-label={t("navDrawer.title")}
           >
             {links.map(({ to, labelKey, icon: Icon }) => {
@@ -87,32 +86,36 @@ export function Navbar() {
                 <Link
                   key={to}
                   to={to}
-                  className={`relative flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium tracking-wide transition-colors md:px-5 md:py-3 ${
-                    isActive ? "text-gold" : headerOverHero ? "text-on-inverse/90 hover:text-gold" : "text-dark/80 hover:text-gold"
-                  }`}
+                  className={`font-display relative flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium tracking-wide transition-colors md:px-5 md:py-3 ${
+                    isActive
+                      ? "text-gold"
+                      : headerOverHero
+                        ? "text-[var(--color-on-inverse)]/90 hover:text-gold"
+                        : "text-dark/80 hover:text-gold dark:text-dark-muted dark:hover:text-gold"
+                  } focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)]`}
                 >
                   {isActive && (
                     <span
-                      className="absolute inset-0 rounded-md bg-gold/10"
+                      className="absolute inset-0 rounded-lg bg-gold/10 dark:bg-gold/15"
                       aria-hidden
                     />
                   )}
-                  <Icon className="relative h-4 w-4 opacity-90" aria-hidden />
+                  <Icon className="relative h-4 w-4 shrink-0 opacity-90" aria-hidden />
                   <span className="relative">{t(labelKey)}</span>
                 </Link>
               );
             })}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <div className="hidden md:block">
               <LangSwitcher variant="navbar" overHero={headerOverHero} />
             </div>
             <button
               type="button"
               onClick={openCart}
-              className={`relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream sm:h-11 sm:w-11 ${
-                headerOverHero ? "text-on-inverse/90" : "text-dark/80"
+              className={`relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] sm:h-11 sm:w-11 ${
+                headerOverHero ? "text-[var(--color-on-inverse)]/90" : "text-dark/80 dark:text-dark-muted"
               } ${cartBump ? "cart-bump" : ""}`}
               aria-label={t("cart.title")}
             >
@@ -126,8 +129,8 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream md:hidden ${
-                headerOverHero ? "text-on-inverse/90" : "text-dark/80"
+              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] md:hidden ${
+                headerOverHero ? "text-[var(--color-on-inverse)]/90" : "text-dark/80 dark:text-dark-muted"
               }`}
               aria-label={t("navDrawer.title")}
               aria-expanded={drawerOpen}

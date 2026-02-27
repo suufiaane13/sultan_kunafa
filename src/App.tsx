@@ -16,6 +16,32 @@ import { NotFound } from "@/pages/NotFound";
 
 const Menu = lazy(() => import("@/pages/Menu").then((m) => ({ default: m.Menu })));
 const About = lazy(() => import("@/pages/About").then((m) => ({ default: m.About })));
+const GestionVente = lazy(() => import("@/gestion-vente/GestionVentePage").then((m) => ({ default: m.GestionVentePage })));
+
+function AppContent() {
+  return (
+    <>
+      <ScrollToTop />
+      <div className="flex min-h-screen flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <Suspense fallback={<RouteSkeleton />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/menu" element={<Menu />} />
+              <Route path="/about" element={<About />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </main>
+        <Footer />
+      </div>
+      <CartDrawer />
+      <FloatingSocial />
+      <LanguagePicker />
+    </>
+  );
+}
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -37,24 +63,10 @@ function App() {
       >
         <LocaleProvider>
           <CartProvider>
-            <ScrollToTop />
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1">
-                <Suspense fallback={<RouteSkeleton />}>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/menu" element={<Menu />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </main>
-              <Footer />
-            </div>
-            <CartDrawer />
-            <FloatingSocial />
-            <LanguagePicker />
+            <Routes>
+              <Route path="/gestion" element={<Suspense fallback={<RouteSkeleton />}><GestionVente /></Suspense>} />
+              <Route path="*" element={<AppContent />} />
+            </Routes>
           </CartProvider>
         </LocaleProvider>
       </div>

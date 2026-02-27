@@ -5,7 +5,7 @@ import { useLocale } from "@/context/LocaleContext";
 import { getWhatsAppUrl } from "@/content/site";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 
-const INSTAGRAM_HANDLE = "sultan_konafa";
+const INSTAGRAM_HANDLE = "sultan_kunafa48";
 const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
 export function FloatingSocial() {
