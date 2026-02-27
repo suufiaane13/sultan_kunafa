@@ -75,7 +75,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
       transition={{ delay: index * 0.08 }}
       whileHover={{ y: -4 }}
     >
-      <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream/80 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
+      <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
         {linkToDetail ? (
           <Link to={`/menu/${item.id}`} className="flex h-full w-full items-center justify-center">
             {webpSrc ? (

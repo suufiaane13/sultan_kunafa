@@ -133,20 +133,20 @@ export function MenuItemPage() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className={`inline-flex items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream dark:focus:ring-offset-[var(--color-surface)] sm:py-3 sm:text-base ${
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-lg border py-2.5 px-4 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream dark:focus:ring-offset-[var(--color-surface)] sm:py-3 sm:text-base ${
                     added
                       ? "border-gold/60 bg-gold/20 text-gold"
-                      : "border-gold bg-gold text-dark shadow-md hover:bg-gold-light hover:shadow-lg"
+                      : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"
                   }`}
                 >
                   {added ? (
                     <>
-                      <Check className="h-5 w-5" aria-hidden />
+                      <Check className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
                       {t("cart.addedToCart")}
                     </>
                   ) : (
                     <>
-                      <ShoppingCart className="h-5 w-5" aria-hidden />
+                      <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
                       {t("menuPage.addToCart")}
                     </>
                   )}

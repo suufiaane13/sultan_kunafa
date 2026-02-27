@@ -9,6 +9,7 @@ import type { VenteJour, VenteType } from "./types";
 
 const PAGE_SIZE = 10;
 type HistoryFilter = "all" | "month" | "week";
+type TypeFilter = "all" | "kunafa" | "flan";
 type HistoryViewMode = "cards" | "table";
 
 function formatDate(s: string, locale: string): string {
@@ -111,6 +112,8 @@ export function GestionVentePage() {
   const [historyPage, setHistoryPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchDateInput, setSearchDateInput] = useState("");
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
+  const [typeFilterOpen, setTypeFilterOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [viewMode, setViewMode] = useState<HistoryViewMode>("cards");
 
@@ -121,6 +124,12 @@ export function GestionVentePage() {
     { value: "week", label: t("gestionVente.currentWeek") },
   ];
   const currentFilterLabel = filterOptions.find((o) => o.value === historyFilter)?.label ?? t("gestionVente.allMonths");
+  const typeFilterOptions: { value: TypeFilter; label: string }[] = [
+    { value: "all", label: t("gestionVente.allTypes") },
+    { value: "kunafa", label: t("gestionVente.typeKunafa") },
+    { value: "flan", label: t("gestionVente.typeFlan") },
+  ];
+  const currentTypeFilterLabel = typeFilterOptions.find((o) => o.value === typeFilter)?.label ?? t("gestionVente.allTypes");
 
   const load = () => setVentes(getVentes());
 
@@ -133,16 +142,22 @@ export function GestionVentePage() {
   const stats = useMemo(() => {
     let totalMois = 0;
     let nbVentesMois = 0;
+    let totalKunafaMois = 0;
+    let totalFlanMois = 0;
     for (const v of ventes) {
       if (getMonthKey(new Date(v.date + "T12:00:00")) === monthKey) {
         totalMois += v.amount;
         nbVentesMois += 1;
+        if (v.type === "kunafa") totalKunafaMois += v.amount;
+        else if (v.type === "flan") totalFlanMois += v.amount;
       }
     }
     const derniere = ventes[0] ?? null;
     return {
       totalMois,
       nbVentesMois,
+      totalKunafaMois,
+      totalFlanMois,
       derniereVente: derniere
         ? { label: formatDerniereVente(derniere.date, t, lang), amount: derniere.amount }
         : null,
@@ -151,17 +166,20 @@ export function GestionVentePage() {
 
   const filteredVentes = useMemo(() => {
     const searchDate = parseSearchDate(searchDateInput);
+    let list: VenteJour[];
     if (searchDate) {
-      return ventes.filter((v) => v.date === searchDate);
+      list = ventes.filter((v) => v.date === searchDate);
+    } else if (historyFilter === "month") {
+      list = ventes.filter((v) => getMonthKey(new Date(v.date + "T12:00:00")) === monthKey);
+    } else if (historyFilter === "week") {
+      list = ventes.filter((v) => isSameWeek(v.date, now));
+    } else {
+      list = ventes;
     }
-    if (historyFilter === "month") {
-      return ventes.filter((v) => getMonthKey(new Date(v.date + "T12:00:00")) === monthKey);
-    }
-    if (historyFilter === "week") {
-      return ventes.filter((v) => isSameWeek(v.date, now));
-    }
-    return ventes;
-  }, [ventes, historyFilter, monthKey, now, searchDateInput]);
+    if (typeFilter === "kunafa") return list.filter((v) => v.type === "kunafa");
+    if (typeFilter === "flan") return list.filter((v) => v.type === "flan");
+    return list;
+  }, [ventes, historyFilter, monthKey, now, searchDateInput, typeFilter]);
 
   const paginatedVentes = useMemo(() => {
     const start = (historyPage - 1) * PAGE_SIZE;
@@ -249,6 +267,16 @@ export function GestionVentePage() {
                 {t("gestionVente.salesThisMonth")}
               </p>
               <p className="mt-0.5 font-display text-base font-semibold tabular-nums text-dark dark:text-dark sm:text-lg">{stats.nbVentesMois}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 divide-x divide-gold/20 border-t border-gold/20">
+            <div className="flex min-w-0 flex-col items-center justify-center px-4 py-3 text-center">
+              <p className="text-xs font-medium text-gold/90 dark:text-gold-light/90">{t("gestionVente.typeKunafa")}</p>
+              <p className="mt-0.5 font-display text-sm font-semibold tabular-nums text-dark dark:text-dark">{stats.totalKunafaMois.toFixed(2)} {t("currency")}</p>
+            </div>
+            <div className="flex min-w-0 flex-col items-center justify-center px-4 py-3 text-center">
+              <p className="text-xs font-medium text-gold/90 dark:text-gold-light/90">{t("gestionVente.typeFlan")}</p>
+              <p className="mt-0.5 font-display text-sm font-semibold tabular-nums text-dark dark:text-dark">{stats.totalFlanMois.toFixed(2)} {t("currency")}</p>
             </div>
           </div>
         </div>
@@ -512,6 +540,52 @@ export function GestionVentePage() {
                                 setFilterOpen(false);
                               }}
                               className={`w-full px-3 py-2 text-left text-sm transition hover:bg-gold/10 dark:hover:bg-gold/15 ${historyFilter === opt.value ? "font-medium text-gold" : "text-dark dark:text-dark-muted"}`}
+                            >
+                              {opt.label}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+                <span className="flex items-center gap-2 text-xs font-medium text-gold dark:text-gold-light md:w-36">
+                  <Filter className="h-3.5 w-3.5" aria-hidden />
+                  {t("gestionVente.typeLabel")}
+                </span>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setTypeFilterOpen((o) => !o)}
+                    className="flex w-full min-w-0 items-center justify-between gap-2 rounded-lg border border-gold/30 bg-[var(--color-surface)] px-3 py-2 text-left text-sm font-medium text-dark focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 dark:border-gold/40 dark:bg-cream-dark dark:text-dark-muted md:min-w-[10rem] md:w-auto rtl:text-right"
+                    aria-haspopup="listbox"
+                    aria-expanded={typeFilterOpen}
+                    aria-label={t("gestionVente.typeLabel")}
+                    id="history-type-filter"
+                  >
+                    <span className="truncate">{currentTypeFilterLabel}</span>
+                    <ChevronDown className={`h-4 w-4 shrink-0 text-gold/80 transition-transform dark:text-gold-light/90 ${typeFilterOpen ? "rotate-180" : ""}`} strokeWidth={2.5} aria-hidden />
+                  </button>
+                  {typeFilterOpen && (
+                    <>
+                      <div className="fixed inset-0 z-10" aria-hidden onClick={() => setTypeFilterOpen(false)} />
+                      <ul
+                        role="listbox"
+                        className="absolute left-0 top-full z-20 mt-1 min-w-[10rem] rounded-lg border border-gold/25 bg-[var(--color-cream)] py-1 shadow-lg dark:border-gold/35 dark:bg-[var(--color-cream-dark)]"
+                        aria-labelledby="history-type-filter"
+                      >
+                        {typeFilterOptions.map((opt) => (
+                          <li key={opt.value} role="option" aria-selected={typeFilter === opt.value}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setTypeFilter(opt.value);
+                                setHistoryPage(1);
+                                setTypeFilterOpen(false);
+                              }}
+                              className={`w-full px-3 py-2 text-left text-sm transition hover:bg-gold/10 dark:hover:bg-gold/15 ${typeFilter === opt.value ? "font-medium text-gold" : "text-dark dark:text-dark-muted"}`}
                             >
                               {opt.label}
                             </button>
