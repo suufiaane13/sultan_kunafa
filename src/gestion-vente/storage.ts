@@ -31,7 +31,7 @@ export function addVente(vente: Omit<VenteJour, "id">): void {
   saveVentes(ventes);
 }
 
-export function updateVente(id: string, patch: Partial<Pick<VenteJour, "date" | "amount" | "note">>): void {
+export function updateVente(id: string, patch: Partial<Pick<VenteJour, "date" | "amount" | "type" | "note">>): void {
   const ventes = getVentes().map((v) => (v.id === id ? { ...v, ...patch } : v));
   ventes.sort((a, b) => b.date.localeCompare(a.date));
   saveVentes(ventes);

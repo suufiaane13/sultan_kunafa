@@ -27,7 +27,7 @@
   font-family: var(--font-display);
 }
 
-/* Mode sombre : basé sur l'heure au Maroc (voir useMoroccoTheme) */
+/* Mode sombre 24h/24 (voir useMoroccoTheme) */
 .dark {
   --color-cream: #1a0f0a;
   --color-cream-dark: #251a12;

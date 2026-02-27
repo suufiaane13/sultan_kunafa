@@ -31,7 +31,7 @@ export function Home() {
         <div className="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4 md:gap-6 lg:gap-8">
           {featured.map((item, i) => (
             <div key={item.id} className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] md:w-[calc(50%-0.75rem)] lg:min-w-[calc((100%-4rem)/3)] lg:max-w-[calc((100%-4rem)/3)] lg:flex-[0_0_calc((100%-4rem)/3)]">
-              <MenuCard item={item} index={i} priority />
+              <MenuCard item={item} index={i} priority linkToDetail />
             </div>
           ))}
         </div>

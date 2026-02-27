@@ -41,6 +41,7 @@ export function Menu() {
               index={i}
               priceAmount={item.priceAmount}
               priority={i < 6}
+              linkToDetail
               onAddToCart={({ id, name, price, priceAmount }) =>
                 addItem(
                   { id, name, priceDisplay: price, priceAmount },

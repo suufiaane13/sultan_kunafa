@@ -15,6 +15,7 @@ import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
 
 const Menu = lazy(() => import("@/pages/Menu").then((m) => ({ default: m.Menu })));
+const MenuItemPage = lazy(() => import("@/pages/MenuItemPage").then((m) => ({ default: m.MenuItemPage })));
 const About = lazy(() => import("@/pages/About").then((m) => ({ default: m.About })));
 const GestionVente = lazy(() => import("@/gestion-vente/GestionVentePage").then((m) => ({ default: m.GestionVentePage })));
 
@@ -29,6 +30,7 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/menu" element={<Menu />} />
+              <Route path="/menu/:id" element={<MenuItemPage />} />
               <Route path="/about" element={<About />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

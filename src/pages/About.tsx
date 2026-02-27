@@ -55,16 +55,19 @@ export function About() {
                 {!avatar1Loaded && (
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
-                <img
-                  src="/avatar-ahmed.png"
-                  alt=""
-                  className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar1Loaded ? "opacity-100" : "opacity-0"} scale-110`}
-                  width={96}
-                  height={96}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setAvatar1Loaded(true)}
-                />
+                <picture>
+                  <source type="image/webp" srcSet="/avatar-ahmed.webp" />
+                  <img
+                    src="/avatar-ahmed.png"
+                    alt=""
+                    className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar1Loaded ? "opacity-100" : "opacity-0"} scale-110`}
+                    width={96}
+                    height={96}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() => setAvatar1Loaded(true)}
+                  />
+                </picture>
               </div>
               <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
                 {t("aboutPage.founder1Name")}
@@ -81,16 +84,19 @@ export function About() {
                 {!avatar2Loaded && (
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
-                <img
-                  src="/avatar-haroun.png"
-                  alt=""
-                  className={`h-full w-full object-cover transition-opacity duration-300 ${avatar2Loaded ? "opacity-100" : "opacity-0"}`}
-                  width={96}
-                  height={96}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setAvatar2Loaded(true)}
-                />
+                <picture>
+                  <source type="image/webp" srcSet="/avatar-haroun.webp" />
+                  <img
+                    src="/avatar-haroun.png"
+                    alt=""
+                    className={`h-full w-full object-cover transition-opacity duration-300 ${avatar2Loaded ? "opacity-100" : "opacity-0"}`}
+                    width={96}
+                    height={96}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() => setAvatar2Loaded(true)}
+                  />
+                </picture>
               </div>
               <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
                 {t("aboutPage.founder2Name")}
@@ -98,7 +104,7 @@ export function About() {
               <p className="mt-1 text-sm font-medium text-gold sm:text-base">{t("aboutPage.founder2Role")}</p>
             </motion.div>
             <motion.div
-              className="founder-card flex flex-col items-center rounded-2xl border border-gold/20 bg-white p-6 text-center shadow-lg sm:p-8"
+              className="founder-card col-span-2 flex flex-col items-center justify-self-center rounded-2xl border border-gold/20 bg-white p-6 text-center shadow-lg sm:p-8 lg:col-span-1 lg:justify-self-auto"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.4 }}
@@ -107,16 +113,19 @@ export function About() {
                 {!avatar3Loaded && (
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
-                <img
-                  src="/avatar-soufiane.png"
-                  alt=""
-                  className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar3Loaded ? "opacity-100" : "opacity-0"}`}
-                  width={96}
-                  height={96}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setAvatar3Loaded(true)}
-                />
+                <picture>
+                  <source type="image/webp" srcSet="/avatar-soufiane.webp" />
+                  <img
+                    src="/avatar-soufiane.png"
+                    alt=""
+                    className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar3Loaded ? "opacity-100" : "opacity-0"}`}
+                    width={96}
+                    height={96}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() => setAvatar3Loaded(true)}
+                  />
+                </picture>
               </div>
               <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
                 {t("aboutPage.founder3Name")}

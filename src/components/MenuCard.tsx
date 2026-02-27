@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingCart, Check } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
@@ -19,6 +20,8 @@ interface MenuCardProps {
   onAddToCart?: (item: MenuItem & { priceAmount: number }) => void;
   /** true = chargement immédiat (above-the-fold), false = lazy */
   priority?: boolean;
+  /** true = image et titre cliquables vers /menu/:id */
+  linkToDetail?: boolean;
 }
 
 const DEFAULT_PRODUCT_IMAGE = "/photo.png";
@@ -43,7 +46,7 @@ function webpSrcSet(path: string): string | null {
   return `${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1200w`;
 }
 
-export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false }: MenuCardProps) {
+export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false }: MenuCardProps) {
   const { t } = useLocale();
   const [added, setAdded] = useState(false);
   const showAddToCart = typeof priceAmount === "number" && onAddToCart;
@@ -72,49 +75,99 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
       transition={{ delay: index * 0.08 }}
       whileHover={{ y: -4 }}
     >
-      <div className="flex aspect-square items-center justify-center overflow-hidden bg-cream/80 sm:aspect-[4/3]">
-        {webpSrc ? (
-          <picture>
-            <source
-              srcSet={webpSet ?? webpSrc}
-              type="image/webp"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
-            />
-            <img
-              src={imageSrc}
-              alt={item.name}
-              className={imgClass}
-              style={imgStyle}
-              loading={priority ? "eager" : "lazy"}
-              decoding="async"
-              draggable={false}
-              onContextMenu={(e) => e.preventDefault()}
-              {...(priority && { fetchpriority: "high" })}
-            />
-          </picture>
+      <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream/80 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
+        {linkToDetail ? (
+          <Link to={`/menu/${item.id}`} className="flex h-full w-full items-center justify-center">
+            {webpSrc ? (
+              <picture>
+                <source
+                  srcSet={webpSet ?? webpSrc}
+                  type="image/webp"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
+                />
+                <img
+                  src={imageSrc}
+                  alt={item.name}
+                  className={imgClass}
+                  style={imgStyle}
+                  loading={priority ? "eager" : "lazy"}
+                  decoding="async"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  {...(priority && { fetchpriority: "high" })}
+                />
+              </picture>
+            ) : (
+              <img
+                src={imageSrc}
+                alt={item.name}
+                className={imgClass}
+                style={imgStyle}
+                loading={priority ? "eager" : "lazy"}
+                decoding="async"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                {...(priority && { fetchpriority: "high" })}
+              />
+            )}
+          </Link>
         ) : (
-          <img
-            src={imageSrc}
-            alt={item.name}
-            className={imgClass}
-            style={imgStyle}
-            loading={priority ? "eager" : "lazy"}
-            decoding="async"
-            draggable={false}
-            onContextMenu={(e) => e.preventDefault()}
-            {...(priority && { fetchpriority: "high" })}
-          />
+          <>
+            {webpSrc ? (
+              <picture>
+                <source
+                  srcSet={webpSet ?? webpSrc}
+                  type="image/webp"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
+                />
+                <img
+                  src={imageSrc}
+                  alt={item.name}
+                  className={imgClass}
+                  style={imgStyle}
+                  loading={priority ? "eager" : "lazy"}
+                  decoding="async"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  {...(priority && { fetchpriority: "high" })}
+                />
+              </picture>
+            ) : (
+              <img
+                src={imageSrc}
+                alt={item.name}
+                className={imgClass}
+                style={imgStyle}
+                loading={priority ? "eager" : "lazy"}
+                decoding="async"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                {...(priority && { fetchpriority: "high" })}
+              />
+            )}
+          </>
         )}
       </div>
       <div className="p-3 sm:p-4 md:p-5">
         {/* Mobile : nom pleine largeur (1 ligne), prix en dessous — Desktop : nom + prix sur une ligne */}
         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
-          <h3
-            className="min-w-0 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark sm:flex-1 sm:text-base sm:tracking-normal md:text-xl"
-            title={item.name}
-          >
-            {item.name}
-          </h3>
+          {linkToDetail ? (
+            <Link to={`/menu/${item.id}`} className="min-w-0 flex-1 sm:flex-1">
+              <h3
+                className="min-w-0 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark hover:text-gold sm:text-base sm:tracking-normal md:text-xl"
+                title={item.name}
+              >
+                {item.name}
+              </h3>
+            </Link>
+          ) : (
+            <h3
+              className="min-w-0 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark sm:flex-1 sm:text-base sm:tracking-normal md:text-xl"
+              title={item.name}
+            >
+              {item.name}
+            </h3>
+          )}
           {item.price ? (
             <span className="shrink-0 text-xs font-semibold text-gold sm:text-sm md:text-base">
               {item.price}
