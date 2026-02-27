@@ -1,11 +1,11 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Star } from "lucide-react";
 import { useState } from "react";
 import type { MenuItem } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
-import { site } from "@/content/site";
+import { site, starredProductIds } from "@/content/site";
 
 const DEFAULT_PRODUCT_IMAGE = "/photo.png";
 
@@ -48,6 +48,7 @@ export function MenuItemPage() {
   const webpSrc = webpUrl(imageSrc);
   const webpSet = webpSrcSet(imageSrc);
   const imgStyle = item.id === "kunafa_roll_nid_mix" ? { width: "115%", height: "115%" } : undefined;
+  const isStarred = starredProductIds.includes(item.id as (typeof starredProductIds)[number]);
 
   const handleAddToCart = () => {
     addItem(
@@ -122,8 +123,11 @@ export function MenuItemPage() {
 
             {/* Contenu : nom, prix, CTA */}
             <div className="relative border-t border-gold/20 px-6 py-6 sm:px-8 sm:py-8">
-              <h2 className="font-display text-2xl font-semibold tracking-tight text-dark dark:text-dark sm:text-3xl">
+              <h2 className="font-display flex items-center gap-2 text-2xl font-semibold tracking-tight text-dark dark:text-dark sm:text-3xl">
                 {item.name}
+                {isStarred && (
+                  <Star className="h-7 w-7 shrink-0 fill-gold text-gold sm:h-8 sm:w-8" aria-hidden />
+                )}
               </h2>
               <div className="mt-1 h-0.5 w-12 rounded-full bg-gold/60" aria-hidden />
               <div className="mt-6 flex flex-wrap items-center justify-between gap-4 sm:mt-8">

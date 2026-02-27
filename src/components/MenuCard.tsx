@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, Star } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
+import { starredProductIds } from "@/content/site";
 
 export interface MenuItem {
   id: string;
@@ -65,16 +66,22 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
     item.id === "kunafa_roll_nid_mix"
       ? { width: "115%", height: "115%" }
       : undefined;
+  const isStarred = starredProductIds.includes(item.id as (typeof starredProductIds)[number]);
 
   return (
     <motion.article
-      className="group overflow-hidden rounded-xl border border-gold/20 bg-cream shadow-lg transition-shadow hover:shadow-xl md:rounded-2xl"
+      className="group relative overflow-hidden rounded-xl border border-gold/20 bg-cream shadow-lg transition-shadow hover:shadow-xl md:rounded-2xl"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
       whileHover={{ y: -4 }}
     >
+      {isStarred && (
+        <span className="absolute right-2 top-2 z-10 rounded-full bg-cream/95 p-1.5 shadow-md dark:bg-dark/80" aria-hidden>
+          <Star className="h-4 w-4 fill-gold text-gold sm:h-4.5 sm:w-4.5" />
+        </span>
+      )}
       <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
         {linkToDetail ? (
           <Link to={`/menu/${item.id}`} className="flex h-full w-full items-center justify-center">

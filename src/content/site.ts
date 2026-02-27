@@ -4,6 +4,9 @@
  * Images menu : public/photos/{id}.png (ex. baklava_carre_noix.png)
  */
 
+/** Produits mis en avant (affichage d'une étoile). */
+export const starredProductIds = ["baklava_carre_noix", "kunafa_a_la_creme", "kunafa_nutella"] as const;
+
 export const site = {
   seo: {
     title: "Sultan Kunafa | Desserts orientaux premium",
