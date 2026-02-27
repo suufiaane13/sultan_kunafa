@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
-import { autoTable } from "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 import type { VenteJour } from "./types";
 
 function formatDateExport(s: string): string {
