@@ -45,7 +45,6 @@ export function MenuItemPage() {
     "sizes" in rawItem &&
     Array.isArray((rawItem as unknown as { flavors?: readonly unknown[] }).flavors);
   const hasCustomPrice = !hasVariants && rawItem.priceAmount === 0;
-  const canAddSimple = !hasVariants;
 
   const item: MenuItem & { priceAmount: number } = {
     id: rawItem.id,
