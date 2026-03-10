@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, Check, Star, Heart, ChevronRight } from "lucide-react";
+import { ShoppingCart, Check, Heart, ChevronRight } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { starredProductIds } from "@/content/site";
 import { useFavorites } from "@/context/FavoritesContext";
@@ -24,6 +24,8 @@ interface MenuCardProps {
   priority?: boolean;
   /** true = image et titre cliquables vers /menu/:id */
   linkToDetail?: boolean;
+  /** State passé au Link (ex. { from: 'featured' } pour retour vers accueil) */
+  linkState?: Record<string, unknown>;
   /** CTA de détail (ex. "Choisir le goût") quand pas d'ajout direct */
   detailCtaLabel?: string;
 }
@@ -50,7 +52,7 @@ function webpSrcSet(path: string): string | null {
   return `${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1200w`;
 }
 
-export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false, detailCtaLabel }: MenuCardProps) {
+export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false, linkState, detailCtaLabel }: MenuCardProps) {
   const { t } = useLocale();
   const { isFavorite, toggle } = useFavorites();
   const [added, setAdded] = useState(false);
@@ -105,10 +107,17 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
       >
         <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
       </button>
+      {isStarred && (
+        <span
+          className="absolute left-0 top-0 z-10 h-0 w-0 border-[20px] border-gold border-r-transparent border-b-transparent shadow-[2px_2px_4px_rgba(0,0,0,0.15)] sm:border-[24px]"
+          aria-label={t("featured.title")}
+        />
+      )}
       <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
         {linkToDetail ? (
           <Link
             to={`/menu/${item.id}`}
+            state={linkState}
             onClick={rememberMenuScroll}
             className="flex h-full w-full items-center justify-center"
           >
@@ -188,6 +197,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
           {linkToDetail ? (
             <Link
               to={`/menu/${item.id}`}
+              state={linkState}
               onClick={rememberMenuScroll}
               className="min-w-0 flex-1 sm:flex-1"
             >
@@ -196,7 +206,6 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
                 title={item.name}
               >
                 {item.name}
-                {isStarred && <Star className="h-3.5 w-3.5 shrink-0 fill-gold text-gold sm:h-4 sm:w-4" aria-hidden />}
               </h3>
             </Link>
           ) : (
@@ -205,7 +214,6 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
               title={item.name}
             >
               {item.name}
-              {isStarred && <Star className="h-3.5 w-3.5 shrink-0 fill-gold text-gold sm:h-4 sm:w-4" aria-hidden />}
             </h3>
           )}
           {item.price ? (
@@ -240,11 +248,12 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
         ) : detailCtaLabel && linkToDetail ? (
           <Link
             to={`/menu/${item.id}`}
+            state={linkState}
             onClick={rememberMenuScroll}
             className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gold/50 bg-gold/10 py-2 text-xs font-medium text-gold transition hover:bg-gold/20 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 sm:mt-3 sm:py-2.5 sm:text-sm"
           >
-            <span>{detailCtaLabel}</span>
             <ChevronRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
+            <span>{detailCtaLabel}</span>
           </Link>
         ) : null}
       </div>

@@ -161,3 +161,10 @@ html::-webkit-scrollbar-thumb:active {
 .cart-bump {
   animation: cart-bump 0.45s ease-out;
 }
+
+/* Supprime tout contour/ring au focus (boutons, liens, etc.) */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}

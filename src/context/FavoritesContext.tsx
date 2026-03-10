@@ -34,11 +34,7 @@ interface FavoritesContextValue {
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [ids, setIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    setIds(loadFavorites());
-  }, []);
+  const [ids, setIds] = useState<string[]>(() => loadFavorites());
 
   useEffect(() => {
     saveFavorites(ids);

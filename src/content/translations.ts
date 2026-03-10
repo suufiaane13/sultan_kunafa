@@ -44,6 +44,12 @@ const translations = {
       flavorLabel: "Au goût",
       sizeLabel: "Taille",
       quantityLabel: "Quantité",
+      filterAll: "Tous",
+      filterSignatures: "Nos signatures",
+      filterBaklava: "Baklava",
+      filterKunafa: "Kunafa",
+      filterDesserts: "Desserts",
+      filterSearchPlaceholder: "Rechercher un plat…",
     },
     aboutPage: {
       title: "Notre histoire",
@@ -197,7 +203,7 @@ const translations = {
       },
       flan: {
         name: "Flan",
-        description: "Flan onctueux, préparé maison.",
+        description: "Flan maison : fraise, caramel, chocolat, vanille, Oreo, KitKat…",
         descriptionShort: "Flan",
       },
       tartelette: {
@@ -263,6 +269,11 @@ const translations = {
       flavorLabel: "بالنكهة",
       sizeLabel: "الحجم",
       quantityLabel: "الكمية",
+      filterAll: "الكل",
+      filterSignatures: "إبداعاتنا المميّزة",
+      filterBaklava: "بقلاوة",
+      filterKunafa: "كنافة",
+      filterSearchPlaceholder: "ابحث عن طبق…",
     },
     aboutPage: {
       title: "قصّتنا",
@@ -416,7 +427,7 @@ const translations = {
       },
       flan: {
         name: "فلان",
-        description: "فلان كريمي محضّر في المنزل.",
+        description: "...فلان منزلي : فراولة، كراميل، شوكولاتة، فانيلا، أوريو، كيت كات…",
         descriptionShort: "فلان",
       },
       tartelette: {

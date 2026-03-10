@@ -782,7 +782,7 @@ export function GestionVentePage() {
                         <span className="font-display text-lg font-semibold tabular-nums text-gold sm:text-base sm:text-lg">
                           {v.amount.toFixed(2)} {t("currency")}
                         </span>
-                      </div>
+                    </div>
                       {v.note && <p className="truncate text-xs text-dark/60 dark:text-dark-muted" title={v.note}>{v.note}</p>}
                   </div>
                 </li>

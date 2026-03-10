@@ -1,14 +1,31 @@
 import { motion } from "framer-motion";
 import { UtensilsCrossed } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { MenuCard } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
-import { site } from "@/content/site";
+import { site, starredProductIds } from "@/content/site";
+
+type MenuFilter = "all" | "signatures" | "baklava" | "kunafa" | "desserts";
+
+function getCategory(id: string): "baklava" | "kunafa" | "desserts" {
+  if (id.startsWith("baklava_")) return "baklava";
+  if (id.startsWith("kunafa_")) return "kunafa";
+  return "desserts";
+}
+
+const FILTERS: { value: MenuFilter; labelKey: "menuPage.filterAll" | "menuPage.filterSignatures" | "menuPage.filterBaklava" | "menuPage.filterKunafa" | "menuPage.filterDesserts" }[] = [
+  { value: "all", labelKey: "menuPage.filterAll" },
+  { value: "signatures", labelKey: "menuPage.filterSignatures" },
+  { value: "baklava", labelKey: "menuPage.filterBaklava" },
+  { value: "kunafa", labelKey: "menuPage.filterKunafa" },
+  { value: "desserts", labelKey: "menuPage.filterDesserts" },
+];
 
 export function Menu() {
   const { t } = useLocale();
   const { addItem } = useCart();
+  const [filter, setFilter] = useState<MenuFilter>("all");
 
   useEffect(() => {
     try {
@@ -17,7 +34,6 @@ export function Menu() {
       sessionStorage.removeItem("sultan-kunafa:menu-scroll-y");
       const y = Number(raw);
       if (Number.isFinite(y) && y >= 0) {
-        // next frame ensures layout is ready
         requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
       }
     } catch {
@@ -25,7 +41,7 @@ export function Menu() {
     }
   }, []);
 
-  const menuItems = site.menu.map((item) => {
+  const menuItems = useMemo(() => site.menu.map((item) => {
     const hasVariants = "flavors" in item && Array.isArray((item as unknown as { flavors?: readonly unknown[] }).flavors);
     const hasCustomPrice = hasVariants || item.priceAmount === 0;
     return {
@@ -36,8 +52,16 @@ export function Menu() {
       priceAmount: hasVariants ? undefined : item.priceAmount,
       hasVariants,
       image: item.image,
+      category: getCategory(item.id),
+      isStarred: starredProductIds.includes(item.id as (typeof starredProductIds)[number]),
     };
-  });
+  }), [t]);
+
+  const filteredItems = useMemo(() => {
+    if (filter === "all") return menuItems;
+    if (filter === "signatures") return menuItems.filter((item) => item.isStarred);
+    return menuItems.filter((item) => item.category === filter);
+  }, [menuItems, filter]);
 
   return (
     <>
@@ -53,10 +77,27 @@ export function Menu() {
         <p className="mt-2 text-sm text-on-inverse/90 sm:mt-3 sm:text-base">{t("menuPage.subtitle")}</p>
       </motion.header>
 
-      <section className="mx-auto max-w-7xl px-3 py-8 sm:px-4 sm:py-10 md:py-12" aria-label={t("menuPage.title")}>
-        {/* Grille cartes : mobile 2 cols, tablette 2 cols, web 3 cols ; dernière ligne centrée si incomplète */}
+      <section className="mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8 md:py-10" aria-label={t("menuPage.title")}>
+        <div className="mb-6 flex flex-wrap justify-center gap-2 sm:mb-8 sm:gap-3" role="tablist" aria-label={t("menuPage.title")}>
+          {FILTERS.map(({ value, labelKey }) => (
+            <button
+              key={value}
+              type="button"
+              role="tab"
+              aria-selected={filter === value}
+              onClick={() => setFilter(value)}
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream ${
+                filter === value
+                  ? "border-gold bg-gold text-dark shadow-md dark:border-gold"
+                  : "border-gold/40 bg-cream/90 text-dark/80 hover:border-gold/60 hover:bg-gold/20 hover:text-dark dark:border-gold/30 dark:bg-cream-dark/90 dark:hover:border-gold/50 dark:hover:bg-gold/25"
+              }`}
+            >
+              {t(labelKey)}
+            </button>
+          ))}
+        </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-          {menuItems.map((item, i) => (
+          {filteredItems.map((item, i) => (
             <div key={item.id} className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] md:w-[calc(50%-0.75rem)] lg:min-w-[calc((100%-4rem)/3)] lg:max-w-[calc((100%-4rem)/3)] lg:flex-[0_0_calc((100%-4rem)/3)]">
               <MenuCard
               item={{ id: item.id, name: item.name, description: item.description, price: item.price, image: item.image }}

@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { X, UtensilsCrossed, Info, ShoppingBag, Heart } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import { LangSwitcher } from "@/components/LangSwitcher";
 
 const links = [
@@ -18,7 +19,9 @@ interface NavDrawerProps {
 
 export function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
   const { t, locale, hydrated } = useLocale();
-  const { openCart, totalCount } = useCart();
+  const { openCart, totalCount, isOpen: cartOpen } = useCart();
+  const { ids: favoriteIds } = useFavorites();
+  const favoritesCount = favoriteIds.length;
   const location = useLocation();
   const isRtl = locale === "ar";
 
@@ -70,6 +73,7 @@ export function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
             <nav className="flex flex-col gap-0.5 p-4" aria-label={t("navDrawer.title")}>
               {links.map(({ to, labelKey, icon: Icon }) => {
                 const isActive = location.pathname === to;
+                const showFavCount = to === "/favoris" && favoritesCount > 0;
                 return (
                   <Link
                     key={to}
@@ -83,6 +87,11 @@ export function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                   >
                     <Icon className="h-5 w-5 shrink-0 opacity-80" aria-hidden />
                     {t(labelKey)}
+                    {showFavCount && (
+                      <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[11px] font-bold tabular-nums text-white rtl:ml-0 rtl:mr-auto">
+                        {favoritesCount > 99 ? "99+" : favoritesCount}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
@@ -94,8 +103,8 @@ export function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
               >
                 <ShoppingBag className="h-5 w-5 shrink-0 opacity-80" aria-hidden />
                 {t("cart.title")}
-                {totalCount > 0 && (
-                  <span className="ml-auto rounded-full bg-gold px-2.5 py-1 text-xs font-bold tabular-nums text-dark rtl:ml-0 rtl:mr-auto">
+                {totalCount > 0 && !cartOpen && (
+                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[11px] font-bold tabular-nums text-white rtl:ml-0 rtl:mr-auto">
                     {totalCount > 99 ? "99+" : totalCount}
                   </span>
                 )}

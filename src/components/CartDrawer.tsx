@@ -35,7 +35,7 @@ export function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-gold/20 px-4 py-4">
               <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-dark">
-                <ShoppingBag className="h-5 w-5 text-gold" aria-hidden />
+                <ShoppingBag className="h-5 w-5 shrink-0 text-gold" aria-hidden />
                 {t("cart.title")}
               </h2>
               <button

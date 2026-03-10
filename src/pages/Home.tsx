@@ -13,7 +13,7 @@ export function Home() {
     id: item.id,
     name: t(`products.${item.id}.name`),
     description: t(`products.${item.id}.description`),
-    price: `${item.priceAmount} ${t("currency")}`,
+    price: item.priceAmount === 0 ? item.price : `${item.priceAmount} ${t("currency")}`,
     image: "image" in item ? item.image : undefined,
   }));
 
@@ -21,7 +21,7 @@ export function Home() {
     <>
       <Hero />
       <AboutSection />
-      <section className="mx-auto max-w-7xl px-3 py-10 sm:px-4 sm:py-12 md:py-16" aria-labelledby="featured-heading">
+      <section id="featured" className="mx-auto max-w-7xl px-3 py-10 sm:px-4 sm:py-12 md:py-16" aria-labelledby="featured-heading">
         <div className="flex flex-col items-center text-center">
           <h2 id="featured-heading" className="font-display text-2xl font-semibold text-dark sm:text-3xl md:text-4xl">
             {t("featured.title")}
@@ -31,7 +31,7 @@ export function Home() {
         <div className="mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4 md:gap-6 lg:gap-8">
           {featured.map((item, i) => (
             <div key={item.id} className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] md:w-[calc(50%-0.75rem)] lg:min-w-[calc((100%-4rem)/3)] lg:max-w-[calc((100%-4rem)/3)] lg:flex-[0_0_calc((100%-4rem)/3)]">
-              <MenuCard item={item} index={i} priority linkToDetail />
+              <MenuCard item={item} index={i} priority linkToDetail linkState={{ from: "featured" }} />
             </div>
           ))}
         </div>

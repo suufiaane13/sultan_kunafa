@@ -1,6 +1,6 @@
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, useLocation, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Star, Minus, Plus, Heart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Minus, Plus, Heart } from "lucide-react";
 import { useState } from "react";
 import type { MenuItem } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
@@ -29,7 +29,9 @@ function webpSrcSet(path: string): string | null {
 
 export function MenuItemPage() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const { t } = useLocale();
+  const fromFeatured = (location.state as { from?: string } | null)?.from === "featured";
   const { addItem } = useCart();
   const { isFavorite, toggle } = useFavorites();
   const [added, setAdded] = useState(false);
@@ -99,7 +101,7 @@ export function MenuItemPage() {
       <header className="sticky top-[var(--navbar-h,64px)] z-20 border-b border-gold/20 bg-[var(--color-inverse-bg)] py-4 text-[var(--color-on-inverse)] sm:py-6">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4">
           <Link
-            to="/menu"
+            to={fromFeatured ? "/#featured" : "/menu"}
             className="flex shrink-0 items-center gap-2 text-sm text-[var(--color-on-inverse)]/80 transition-colors hover:text-gold"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
@@ -132,6 +134,12 @@ export function MenuItemPage() {
               >
                 <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
               </button>
+              {isStarred && (
+                <span
+                  className="absolute left-0 top-0 z-10 h-0 w-0 border-[24px] border-gold border-r-transparent border-b-transparent shadow-[2px_2px_6px_rgba(0,0,0,0.2)] sm:border-[28px]"
+                  aria-label={t("featured.title")}
+                />
+              )}
               {webpSrc ? (
                 <picture>
                   <source
@@ -164,17 +172,12 @@ export function MenuItemPage() {
               )}
             </div>
 
-            {/* Contenu : nom, prix ou parfums/tailles, CTA — centré et rangé */}
+            {/* Contenu : description, prix ou parfums/tailles, CTA — centré et rangé */}
             <div className="relative flex flex-col items-center border-t border-gold/20 px-6 py-6 text-center sm:px-8 sm:py-8">
-              <div className="flex w-full items-center justify-center">
-                <h2 className="font-display flex items-center justify-center gap-2 text-2xl font-semibold tracking-tight text-dark dark:text-dark sm:text-3xl">
-                  {item.name}
-                  {isStarred && (
-                    <Star className="h-7 w-7 shrink-0 fill-gold text-gold sm:h-8 sm:w-8" aria-hidden />
-                  )}
-                </h2>
-              </div>
-              <div className="mt-1 h-0.5 w-12 rounded-full bg-gold/60" aria-hidden />
+              <p className="text-base font-medium leading-relaxed text-dark/90 dark:text-dark-muted sm:text-lg">
+                {item.description}
+              </p>
+              <div className="mt-3 h-0.5 w-12 rounded-full bg-gold/60" aria-hidden />
 
               {hasVariants ? (
                 <>
@@ -361,16 +364,6 @@ export function MenuItemPage() {
               )}
             </div>
           </motion.article>
-
-          <p className="mt-8 text-center">
-            <Link
-              to="/menu"
-              className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gold transition-colors hover:bg-gold/10 hover:text-gold-dark dark:text-gold-light dark:hover:bg-gold/15 dark:hover:text-gold"
-            >
-              <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />
-              {t("menuPage.title")}
-            </Link>
-          </p>
         </div>
       </main>
     </>
