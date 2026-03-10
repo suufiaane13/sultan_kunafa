@@ -5,7 +5,28 @@
  */
 
 /** Produits mis en avant (affichage d'une étoile). */
-export const starredProductIds = ["baklava_carre_noix", "kunafa_a_la_creme", "kunafa_nutella"] as const;
+export const starredProductIds = ["baklava_carre_noix", "kunafa_a_la_creme", "flan", "tiramisu"] as const;
+
+/** Parfums Tiramisu (ids pour traductions). */
+export const tiramisuFlavorIds = ["classique", "oreo", "raffaello", "ferrero", "lotus", "kinder", "blueberry", "mango"] as const;
+
+/** Tailles Tiramisu. */
+export const tiramisuSizeIds = ["P", "G"] as const;
+
+/** Prix Tiramisu par goût (P, G) en DH. Ordre : classique, oreo, raffaello, ferrero, lotus, kinder, blueberry, mango */
+export const tiramisuPrices: Record<(typeof tiramisuFlavorIds)[number], { P: number; G: number }> = {
+  classique: { P: 20, G: 80 },
+  oreo: { P: 25, G: 90 },
+  raffaello: { P: 45, G: 135 },
+  ferrero: { P: 45, G: 135 },
+  lotus: { P: 45, G: 135 },
+  kinder: { P: 45, G: 135 },
+  blueberry: { P: 55, G: 145 },
+  mango: { P: 60, G: 170 },
+};
+
+export type TiramisuFlavorId = (typeof tiramisuFlavorIds)[number];
+export type TiramisuSizeId = (typeof tiramisuSizeIds)[number];
 
 export const site = {
   seo: {
@@ -30,7 +51,8 @@ export const site = {
     items: [
       { id: "baklava_carre_noix", name: "Baklava carré noix", description: "Baklava carré aux noix.", price: "11 DH", priceAmount: 11, image: "/photos/baklava_carre_noix.png" },
       { id: "kunafa_a_la_creme", name: "Kunafa à la crème", description: "Kunafa généreuse à la crème.", price: "10 DH", priceAmount: 10, image: "/photos/kunafa_a_la_crème.png" },
-      { id: "kunafa_nutella", name: "Kunafa Nutella", description: "Kunafa au Nutella.", price: "9 DH", priceAmount: 9, image: "/photos/kunafa_nutella.png" },
+      { id: "flan", name: "Flan", description: "Flan onctueux, préparé maison.", price: "10 DH", priceAmount: 10, image: "/flan.png" },
+      { id: "tiramisu", name: "Tiramisu", description: "Plusieurs goûts au choix.", price: "20 - 170 DH", priceAmount: 0, image: "/tiramisu.png" },
     ],
   },
   menu: [
@@ -42,6 +64,18 @@ export const site = {
     { id: "kunafa_mini_nid_amandes", name: "Kunafa mini nid amandes", description: "Mini nid aux amandes", price: "3 DH", priceAmount: 3, image: "/photos/kunafa_mini_nid_amandes.png" },
     { id: "kunafa_roll_nid_mix", name: "Kunafa roll nid mix", description: "Roulé nid mix", price: "8 DH", priceAmount: 8, image: "/photos/kunafa_roll_nid_mix.png" },
     { id: "kunafa_nutella", name: "Kunafa Nutella", description: "Kunafa Nutella", price: "9 DH", priceAmount: 9, image: "/photos/kunafa_nutella.png" },
+    { id: "flan", name: "Flan", description: "Flan", price: "10 DH", priceAmount: 10, image: "/flan.png" },
+    { id: "tartelette", name: "Tartelette", description: "Tartelette", price: "8 DH", priceAmount: 8, image: "/tartelette.png" },
+    {
+      id: "tiramisu",
+      name: "Tiramisu",
+      description: "Tiramisu aux parfums variés.",
+      price: "20 - 170 DH",
+      priceAmount: 0,
+      image: "/tiramisu.png",
+      flavors: [...tiramisuFlavorIds],
+      sizes: [...tiramisuSizeIds],
+    },
   ],
   about: "Sultan Kunafa allie tradition orientale et goût moderne pour des desserts inoubliables, inspirés d'un héritage précieux.",
   cta: {

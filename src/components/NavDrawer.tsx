@@ -1,12 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import { X, UtensilsCrossed, Info, ShoppingBag } from "lucide-react";
+import { X, UtensilsCrossed, Info, ShoppingBag, Heart } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
 import { LangSwitcher } from "@/components/LangSwitcher";
 
 const links = [
   { to: "/menu", labelKey: "nav.menu" as const, icon: UtensilsCrossed },
+  { to: "/favoris", labelKey: "nav.favorites" as const, icon: Heart },
   { to: "/about", labelKey: "nav.about" as const, icon: Info },
 ];
 

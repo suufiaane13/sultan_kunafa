@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, UtensilsCrossed, Info, ShoppingBag } from "lucide-react";
+import { Menu, UtensilsCrossed, Info, ShoppingBag, Heart } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
 import { NavDrawer } from "@/components/NavDrawer";
@@ -8,6 +8,7 @@ import { LangSwitcher } from "@/components/LangSwitcher";
 
 const links = [
   { to: "/menu", labelKey: "nav.menu" as const, icon: UtensilsCrossed },
+  { to: "/favoris", labelKey: "nav.favorites" as const, icon: Heart },
   { to: "/about", labelKey: "nav.about" as const, icon: Info },
 ];
 
@@ -19,6 +20,7 @@ export function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overHero, setOverHero] = useState(false);
   const location = useLocation();
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (location.pathname !== "/") {
@@ -30,6 +32,22 @@ export function Navbar() {
     window.addEventListener("scroll", check, { passive: true });
     return () => window.removeEventListener("scroll", check);
   }, [location.pathname]);
+
+  // Expose la hauteur réelle de la navbar pour les sous-headers sticky.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const el = headerRef.current;
+    if (!el) return;
+
+    const setVar = () => {
+      const h = Math.round(el.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--navbar-h", `${h}px`);
+    };
+
+    setVar();
+    window.addEventListener("resize", setVar, { passive: true });
+    return () => window.removeEventListener("resize", setVar);
+  }, []);
 
   // Bloquer le scroll du body quand le menu (drawer) est ouvert
   useEffect(() => {
@@ -48,6 +66,7 @@ export function Navbar() {
   return (
     <>
       <header
+        ref={headerRef}
         className={`sticky top-0 z-30 border-b shadow-[var(--shadow-nav)] backdrop-blur-md transition-colors duration-200 ${
           headerOverHero
             ? "border-gold/20 bg-[var(--color-inverse-bg)]/90 text-[var(--color-on-inverse)]"

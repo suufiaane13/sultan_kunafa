@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { UtensilsCrossed } from "lucide-react";
+import { useEffect } from "react";
 import { MenuCard } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
@@ -8,14 +9,35 @@ import { site } from "@/content/site";
 export function Menu() {
   const { t } = useLocale();
   const { addItem } = useCart();
-  const menuItems = site.menu.map((item) => ({
-    id: item.id,
-    name: t(`products.${item.id}.name`),
-    description: t(`products.${item.id}.descriptionShort`),
-    price: `${item.priceAmount} ${t("currency")}`,
-    priceAmount: item.priceAmount,
-    image: item.image,
-  }));
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("sultan-kunafa:menu-scroll-y");
+      if (!raw) return;
+      sessionStorage.removeItem("sultan-kunafa:menu-scroll-y");
+      const y = Number(raw);
+      if (Number.isFinite(y) && y >= 0) {
+        // next frame ensures layout is ready
+        requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const menuItems = site.menu.map((item) => {
+    const hasVariants = "flavors" in item && Array.isArray((item as unknown as { flavors?: readonly unknown[] }).flavors);
+    const hasCustomPrice = hasVariants || item.priceAmount === 0;
+    return {
+      id: item.id,
+      name: t(`products.${item.id}.name`),
+      description: t(`products.${item.id}.descriptionShort`),
+      price: hasCustomPrice ? item.price : `${item.priceAmount} ${t("currency")}`,
+      priceAmount: hasVariants ? undefined : item.priceAmount,
+      hasVariants,
+      image: item.image,
+    };
+  });
 
   return (
     <>
@@ -42,11 +64,12 @@ export function Menu() {
               priceAmount={item.priceAmount}
               priority={i < 6}
               linkToDetail
-              onAddToCart={({ id, name, price, priceAmount }) =>
-                addItem(
-                  { id, name, priceDisplay: price, priceAmount },
-                  1
-                )
+              detailCtaLabel={item.hasVariants ? t("menuPage.chooseFlavor") : undefined}
+              onAddToCart={
+                item.priceAmount != null
+                  ? ({ id, name, price, priceAmount }) =>
+                      addItem({ id, name, priceDisplay: price, priceAmount }, 1)
+                  : undefined
               }
             />
             </div>

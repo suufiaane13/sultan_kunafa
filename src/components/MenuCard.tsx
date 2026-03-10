@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, Check, Star } from "lucide-react";
+import { ShoppingCart, Check, Star, Heart, ChevronRight } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { starredProductIds } from "@/content/site";
+import { useFavorites } from "@/context/FavoritesContext";
 
 export interface MenuItem {
   id: string;
@@ -23,6 +24,8 @@ interface MenuCardProps {
   priority?: boolean;
   /** true = image et titre cliquables vers /menu/:id */
   linkToDetail?: boolean;
+  /** CTA de détail (ex. "Choisir le goût") quand pas d'ajout direct */
+  detailCtaLabel?: string;
 }
 
 const DEFAULT_PRODUCT_IMAGE = "/photo.png";
@@ -47,10 +50,18 @@ function webpSrcSet(path: string): string | null {
   return `${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1200w`;
 }
 
-export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false }: MenuCardProps) {
+export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false, detailCtaLabel }: MenuCardProps) {
   const { t } = useLocale();
+  const { isFavorite, toggle } = useFavorites();
   const [added, setAdded] = useState(false);
   const showAddToCart = typeof priceAmount === "number" && onAddToCart;
+  const rememberMenuScroll = () => {
+    try {
+      sessionStorage.setItem("sultan-kunafa:menu-scroll-y", String(window.scrollY));
+    } catch {
+      // ignore
+    }
+  };
 
   const handleAdd = () => {
     if (!onAddToCart || typeof priceAmount !== "number") return;
@@ -61,12 +72,17 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
   const imageSrc = item.image ?? DEFAULT_PRODUCT_IMAGE;
   const webpSrc = webpUrl(imageSrc);
   const webpSet = webpSrcSet(imageSrc);
-  const imgClass = "h-full w-full object-contain transition-transform duration-300 group-hover:scale-105";
+  const imgClass = "h-full w-full object-contain object-center transition-transform duration-300 group-hover:scale-105";
   const imgStyle =
     item.id === "kunafa_roll_nid_mix"
       ? { width: "115%", height: "115%" }
-      : undefined;
+      : item.id === "tartelette"
+        ? { width: "82%", height: "82%", marginLeft: "8%" }
+        : item.id === "tiramisu" || item.id === "flan"
+          ? { marginTop: "-6%" }
+        : undefined;
   const isStarred = starredProductIds.includes(item.id as (typeof starredProductIds)[number]);
+  const favorite = isFavorite(item.id);
 
   return (
     <motion.article
@@ -77,14 +93,25 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
       transition={{ delay: index * 0.08 }}
       whileHover={{ y: -4 }}
     >
-      {isStarred && (
-        <span className="absolute right-2 top-2 z-10 rounded-full bg-cream/95 p-1.5 shadow-md dark:bg-dark/80" aria-hidden>
-          <Star className="h-4 w-4 fill-gold text-gold sm:h-4.5 sm:w-4.5" />
-        </span>
-      )}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle(item.id);
+        }}
+        className="absolute right-2 top-2 z-10 rounded-full bg-cream/95 p-1.5 shadow-md transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold/50 dark:bg-dark/80 dark:hover:bg-gold/15"
+        aria-label={favorite ? t("favorites.remove") : t("favorites.add")}
+      >
+        <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
+      </button>
       <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
         {linkToDetail ? (
-          <Link to={`/menu/${item.id}`} className="flex h-full w-full items-center justify-center">
+          <Link
+            to={`/menu/${item.id}`}
+            onClick={rememberMenuScroll}
+            className="flex h-full w-full items-center justify-center"
+          >
             {webpSrc ? (
               <picture>
                 <source
@@ -159,20 +186,26 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
         {/* Mobile : nom pleine largeur (1 ligne), prix en dessous — Desktop : nom + prix sur une ligne */}
         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
           {linkToDetail ? (
-            <Link to={`/menu/${item.id}`} className="min-w-0 flex-1 sm:flex-1">
+            <Link
+              to={`/menu/${item.id}`}
+              onClick={rememberMenuScroll}
+              className="min-w-0 flex-1 sm:flex-1"
+            >
               <h3
-                className="min-w-0 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark hover:text-gold sm:text-base sm:tracking-normal md:text-xl"
+                className="flex min-w-0 items-center gap-1 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark hover:text-gold sm:text-base sm:tracking-normal md:text-xl"
                 title={item.name}
               >
                 {item.name}
+                {isStarred && <Star className="h-3.5 w-3.5 shrink-0 fill-gold text-gold sm:h-4 sm:w-4" aria-hidden />}
               </h3>
             </Link>
           ) : (
             <h3
-              className="min-w-0 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark sm:flex-1 sm:text-base sm:tracking-normal md:text-xl"
+              className="flex min-w-0 items-center gap-1 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark sm:flex-1 sm:text-base sm:tracking-normal md:text-xl"
               title={item.name}
             >
               {item.name}
+              {isStarred && <Star className="h-3.5 w-3.5 shrink-0 fill-gold text-gold sm:h-4 sm:w-4" aria-hidden />}
             </h3>
           )}
           {item.price ? (
@@ -182,7 +215,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
           ) : null}
         </div>
 
-        {showAddToCart && (
+        {showAddToCart ? (
           <button
             type="button"
             onClick={handleAdd}
@@ -204,7 +237,16 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
               </>
             )}
           </button>
-        )}
+        ) : detailCtaLabel && linkToDetail ? (
+          <Link
+            to={`/menu/${item.id}`}
+            onClick={rememberMenuScroll}
+            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gold/50 bg-gold/10 py-2 text-xs font-medium text-gold transition hover:bg-gold/20 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 sm:mt-3 sm:py-2.5 sm:text-sm"
+          >
+            <span>{detailCtaLabel}</span>
+            <ChevronRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
+          </Link>
+        ) : null}
       </div>
     </motion.article>
   );

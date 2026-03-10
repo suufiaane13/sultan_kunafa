@@ -317,7 +317,7 @@ export function GestionVentePage() {
                     <Banknote className="h-4 w-4" aria-hidden />
                   </span>
                   {t("gestionVente.newSale")}
-                </h2>
+          </h2>
                 <button
                   type="button"
                   onClick={() => setFormOpen(false)}
@@ -330,58 +330,58 @@ export function GestionVentePage() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="grid grid-cols-3 gap-3">
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
+                <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-gold" aria-hidden /> {t("gestionVente.day")}
-                    </span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={31}
-                      value={day}
-                      onChange={(e) => setDay(Math.max(1, Math.min(31, parseInt(e.target.value, 10) || 1)))}
+                </span>
+                <input
+                  type="number"
+                  min={1}
+                  max={31}
+                  value={day}
+                  onChange={(e) => setDay(Math.max(1, Math.min(31, parseInt(e.target.value, 10) || 1)))}
                       className="rounded-lg border border-gold/30 bg-[var(--color-cream)] px-3 py-2.5 text-sm text-dark tabular-nums transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 dark:border-gold/40 dark:bg-cream-dark"
-                      required
-                    />
-                  </label>
+                  required
+                />
+              </label>
                   <label className="flex flex-col gap-1.5">
                     <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-gold" aria-hidden />
                       {t("gestionVente.month")}
                     </span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={12}
-                      value={month}
-                      onChange={(e) => {
-                        const m = Math.max(1, Math.min(12, parseInt(e.target.value, 10) || 1));
-                        setMonth(m);
-                        setDay((d) => Math.min(d, daysInMonth(m, year)));
-                      }}
+                <input
+                  type="number"
+                  min={1}
+                  max={12}
+                  value={month}
+                  onChange={(e) => {
+                    const m = Math.max(1, Math.min(12, parseInt(e.target.value, 10) || 1));
+                    setMonth(m);
+                    setDay((d) => Math.min(d, daysInMonth(m, year)));
+                  }}
                       className="rounded-lg border border-gold/30 bg-[var(--color-cream)] px-3 py-2.5 text-sm text-dark tabular-nums transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 dark:border-gold/40 dark:bg-cream-dark"
-                      required
-                    />
-                  </label>
+                  required
+                />
+              </label>
                   <label className="flex flex-col gap-1.5">
                     <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-gold" aria-hidden />
                       {t("gestionVente.year")}
                     </span>
-                    <input
-                      type="number"
-                      min={2020}
-                      max={2030}
-                      value={year}
-                      onChange={(e) => {
-                        const y = Math.max(2020, Math.min(2030, parseInt(e.target.value, 10) || new Date().getFullYear()));
-                        setYear(y);
-                        setDay((d) => Math.min(d, daysInMonth(month, y)));
-                      }}
+                <input
+                  type="number"
+                  min={2020}
+                  max={2030}
+                  value={year}
+                  onChange={(e) => {
+                    const y = Math.max(2020, Math.min(2030, parseInt(e.target.value, 10) || new Date().getFullYear()));
+                    setYear(y);
+                    setDay((d) => Math.min(d, daysInMonth(month, y)));
+                  }}
                       className="rounded-lg border border-gold/30 bg-[var(--color-cream)] px-3 py-2.5 text-sm text-dark tabular-nums transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 dark:border-gold/40 dark:bg-cream-dark"
-                      required
-                    />
-                  </label>
-                </div>
+                  required
+                />
+              </label>
+            </div>
                 <label className="flex flex-col gap-1.5">
                   <span className="text-xs font-medium text-dark/70 dark:text-dark-muted">{t("gestionVente.typeLabel")}</span>
                   <select
@@ -395,33 +395,33 @@ export function GestionVentePage() {
                   </select>
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
+              <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
                     <Banknote className="h-3.5 w-3.5 text-gold" aria-hidden /> {t("gestionVente.amountDh")}
-                  </span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+              </span>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
                     placeholder={t("gestionVente.amountPlaceholder")}
                     className="rounded-lg border border-gold/30 bg-[var(--color-cream)] px-3 py-2.5 text-sm text-dark placeholder:text-dark/40 transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 dark:border-gold/40 dark:bg-cream-dark"
-                    required
-                  />
-                </label>
+                required
+              />
+            </label>
                 <label className="flex flex-col gap-1.5">
                   <span className="text-xs font-medium text-dark/70 dark:text-dark-muted flex items-center gap-1">
                     <StickyNote className="h-3.5 w-3.5 text-gold" aria-hidden />
                     {t("gestionVente.noteOptional")}
                   </span>
-                  <input
-                    type="text"
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
+              <input
+                type="text"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
                     placeholder={t("gestionVente.notePlaceholder")}
                     className="rounded-lg border border-gold/30 bg-[var(--color-cream)] px-3 py-2.5 text-sm text-dark placeholder:text-dark/40 transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 dark:border-gold/40 dark:bg-cream-dark"
-                  />
-                </label>
+              />
+            </label>
                 <div className="mt-2 flex gap-3">
                   <button
                     type="button"
@@ -430,14 +430,14 @@ export function GestionVentePage() {
                   >
                     {t("gestionVente.cancel")}
                   </button>
-                  <button
-                    type="submit"
+            <button
+              type="submit"
                     className="flex-1 rounded-lg bg-gold px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-gold-light focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)]"
-                  >
+            >
                     {t("gestionVente.save")}
-                  </button>
+            </button>
                 </div>
-              </form>
+          </form>
             </div>
           </>
         )}
@@ -753,10 +753,10 @@ export function GestionVentePage() {
             </>
           ) : (
             <>
-              <ul className="space-y-2">
+            <ul className="space-y-2">
                 {paginatedVentes.map((v) => (
-                  <li
-                    key={v.id}
+                <li
+                  key={v.id}
                     className="flex flex-col gap-1 rounded-xl border border-gold/20 bg-[var(--color-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] dark:border-gold/30 sm:flex-row sm:items-center sm:gap-3 sm:px-4 sm:py-3"
                   >
                     <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -784,10 +784,10 @@ export function GestionVentePage() {
                         </span>
                       </div>
                       {v.note && <p className="truncate text-xs text-dark/60 dark:text-dark-muted" title={v.note}>{v.note}</p>}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                </li>
+              ))}
+            </ul>
               {hasMore && (
                 <div className="mt-4 flex justify-center">
                   <button

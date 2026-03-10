@@ -1,11 +1,12 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Star } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Star, Minus, Plus, Heart } from "lucide-react";
 import { useState } from "react";
 import type { MenuItem } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
-import { site, starredProductIds } from "@/content/site";
+import { useFavorites } from "@/context/FavoritesContext";
+import { site, starredProductIds, tiramisuFlavorIds, tiramisuPrices, tiramisuSizeIds } from "@/content/site";
 
 const DEFAULT_PRODUCT_IMAGE = "/photo.png";
 
@@ -30,30 +31,65 @@ export function MenuItemPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useLocale();
   const { addItem } = useCart();
+  const { isFavorite, toggle } = useFavorites();
   const [added, setAdded] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   const rawItem = id ? site.menu.find((m) => m.id === id) : null;
   if (!rawItem) return <Navigate to="/menu" replace />;
+
+  const hasVariants =
+    "flavors" in rawItem &&
+    "sizes" in rawItem &&
+    Array.isArray((rawItem as unknown as { flavors?: readonly unknown[] }).flavors);
+  const hasCustomPrice = !hasVariants && rawItem.priceAmount === 0;
+  const canAddSimple = !hasVariants;
 
   const item: MenuItem & { priceAmount: number } = {
     id: rawItem.id,
     name: t(`products.${rawItem.id}.name`),
     description: t(`products.${rawItem.id}.description`),
-    price: `${rawItem.priceAmount} ${t("currency")}`,
-    priceAmount: rawItem.priceAmount,
+    price: hasVariants || hasCustomPrice ? (rawItem as { price: string }).price : `${rawItem.priceAmount} ${t("currency")}`,
+    priceAmount: hasVariants ? 0 : rawItem.priceAmount,
     image: rawItem.image,
   };
 
   const imageSrc = item.image ?? DEFAULT_PRODUCT_IMAGE;
   const webpSrc = webpUrl(imageSrc);
   const webpSet = webpSrcSet(imageSrc);
-  const imgStyle = item.id === "kunafa_roll_nid_mix" ? { width: "115%", height: "115%" } : undefined;
+  const imgStyle =
+    item.id === "kunafa_roll_nid_mix"
+      ? { width: "115%", height: "115%" }
+      : item.id === "tartelette"
+        ? { width: "82%", height: "82%", marginLeft: "6%" }
+        : item.id === "tiramisu" || item.id === "flan"
+          ? { marginTop: "-6%" }
+        : undefined;
   const isStarred = starredProductIds.includes(item.id as (typeof starredProductIds)[number]);
+  const favorite = isFavorite(item.id);
 
   const handleAddToCart = () => {
     addItem(
       { id: item.id, name: item.name, priceDisplay: item.price, priceAmount: item.priceAmount },
-      1
+      quantity
+    );
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 800);
+  };
+
+  const handleAddVariantToCart = () => {
+    if (!selectedFlavor || !selectedSize) return;
+    const flavorLabel = t(`products.tiramisu.flavors.${selectedFlavor}`);
+    const sizeLabel = t(`products.tiramisu.size${selectedSize}` as "products.tiramisu.sizeP" | "products.tiramisu.sizeG");
+    const variantId = `tiramisu_${selectedFlavor}_${selectedSize}`;
+    const variantName = `${item.name} – ${flavorLabel} (${sizeLabel})`;
+    const priceAmount = tiramisuPrices[selectedFlavor as keyof typeof tiramisuPrices][selectedSize as "P" | "G"];
+    const priceDisplay = `${priceAmount} ${t("currency")}`;
+    addItem(
+      { id: variantId, name: variantName, priceDisplay, priceAmount },
+      quantity
     );
     setAdded(true);
     window.setTimeout(() => setAdded(false), 800);
@@ -61,7 +97,7 @@ export function MenuItemPage() {
 
   return (
     <>
-      <header className="border-b border-gold/20 bg-[var(--color-inverse-bg)] py-4 text-[var(--color-on-inverse)] sm:py-6">
+      <header className="sticky top-[var(--navbar-h,64px)] z-20 border-b border-gold/20 bg-[var(--color-inverse-bg)] py-4 text-[var(--color-on-inverse)] sm:py-6">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4">
           <Link
             to="/menu"
@@ -89,6 +125,14 @@ export function MenuItemPage() {
             {/* Image avec cadre premium */}
             <div className="relative aspect-[4/3] overflow-hidden bg-cream-dark/60 sm:aspect-[3/2]">
               <div className="absolute inset-0 bg-gradient-to-t from-dark/10 via-transparent to-transparent pointer-events-none z-[1]" aria-hidden />
+              <button
+                type="button"
+                onClick={() => toggle(item.id)}
+                className="absolute right-2 top-2 z-10 rounded-full bg-cream/95 p-1.5 shadow-md transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold/50 dark:bg-dark/80 dark:hover:bg-gold/15"
+                aria-label={favorite ? t("favorites.remove") : t("favorites.add")}
+              >
+                <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
+              </button>
               {webpSrc ? (
                 <picture>
                   <source
@@ -99,7 +143,7 @@ export function MenuItemPage() {
                   <img
                     src={imageSrc}
                     alt={item.name}
-                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
                     style={imgStyle}
                     loading="eager"
                     decoding="async"
@@ -111,7 +155,7 @@ export function MenuItemPage() {
                 <img
                   src={imageSrc}
                   alt={item.name}
-                  className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
                   style={imgStyle}
                   loading="eager"
                   decoding="async"
@@ -121,41 +165,201 @@ export function MenuItemPage() {
               )}
             </div>
 
-            {/* Contenu : nom, prix, CTA */}
-            <div className="relative border-t border-gold/20 px-6 py-6 sm:px-8 sm:py-8">
-              <h2 className="font-display flex items-center gap-2 text-2xl font-semibold tracking-tight text-dark dark:text-dark sm:text-3xl">
-                {item.name}
-                {isStarred && (
-                  <Star className="h-7 w-7 shrink-0 fill-gold text-gold sm:h-8 sm:w-8" aria-hidden />
-                )}
-              </h2>
-              <div className="mt-1 h-0.5 w-12 rounded-full bg-gold/60" aria-hidden />
-              <div className="mt-6 flex flex-wrap items-center justify-between gap-4 sm:mt-8">
-                <span className="font-display text-xl font-semibold text-gold dark:text-gold-light sm:text-2xl">
-                  {item.price}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleAddToCart}
-                  className={`inline-flex items-center justify-center gap-1.5 rounded-lg border py-2.5 px-4 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream dark:focus:ring-offset-[var(--color-surface)] sm:py-3 sm:text-base ${
-                    added
-                      ? "border-gold/60 bg-gold/20 text-gold"
-                      : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"
-                  }`}
-                >
-                  {added ? (
-                    <>
-                      <Check className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
-                      {t("cart.addedToCart")}
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
-                      {t("menuPage.addToCart")}
-                    </>
+            {/* Contenu : nom, prix ou parfums/tailles, CTA — centré et rangé */}
+            <div className="relative flex flex-col items-center border-t border-gold/20 px-6 py-6 text-center sm:px-8 sm:py-8">
+              <div className="flex w-full items-center justify-center">
+                <h2 className="font-display flex items-center justify-center gap-2 text-2xl font-semibold tracking-tight text-dark dark:text-dark sm:text-3xl">
+                  {item.name}
+                  {isStarred && (
+                    <Star className="h-7 w-7 shrink-0 fill-gold text-gold sm:h-8 sm:w-8" aria-hidden />
                   )}
-                </button>
+                </h2>
               </div>
+              <div className="mt-1 h-0.5 w-12 rounded-full bg-gold/60" aria-hidden />
+
+              {hasVariants ? (
+                <>
+                  <p className="mt-4 max-w-md text-sm font-medium text-gold dark:text-gold-light">
+                    {t("products.tiramisu.description")}
+                  </p>
+                  <div className="mt-5 w-full max-w-lg">
+                    <span className="block text-xs font-medium uppercase tracking-wide text-dark/70 dark:text-dark-muted">
+                      {t("menuPage.flavorLabel")}
+                    </span>
+                    <div className="mt-2 flex flex-wrap justify-center gap-2">
+                      {tiramisuFlavorIds.map((flavorId) => (
+                        <button
+                          key={flavorId}
+                          type="button"
+                          onClick={() => {
+                          setSelectedFlavor(flavorId);
+                          setSelectedSize(null);
+                        }}
+                          className={`rounded-lg border px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] ${
+                            selectedFlavor === flavorId
+                              ? "border-gold bg-gold/20 text-gold"
+                              : "border-gold/30 bg-transparent text-dark hover:bg-gold/10 dark:text-dark-muted dark:hover:bg-gold/15"
+                          }`}
+                        >
+                          {t(`products.tiramisu.flavors.${flavorId}`)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="mt-5 w-full max-w-lg grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <span className="block text-xs font-medium uppercase tracking-wide text-dark/70 dark:text-dark-muted">
+                        {t("menuPage.sizeLabel")}
+                      </span>
+                      <div className="mt-2 flex justify-center gap-2">
+                        {tiramisuSizeIds.map((sizeId) => (
+                          <button
+                            key={sizeId}
+                            type="button"
+                            disabled={!selectedFlavor}
+                            onClick={() => setSelectedSize(sizeId)}
+                            className={`rounded-lg border px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
+                              selectedSize === sizeId
+                                ? "border-gold bg-gold/20 text-gold"
+                                : "border-gold/30 bg-transparent text-dark hover:bg-gold/10 dark:text-dark-muted dark:hover:bg-gold/15"
+                            }`}
+                          >
+                            {t(`products.tiramisu.size${sizeId}` as "products.tiramisu.sizeP" | "products.tiramisu.sizeG")}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="block text-xs font-medium uppercase tracking-wide text-dark/70 dark:text-dark-muted">
+                        {t("menuPage.quantityLabel")}
+                      </span>
+                      <div className="mt-2 flex items-center justify-center gap-2">
+                        <button
+                          type="button"
+                          disabled={!selectedSize}
+                          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold/30 bg-[var(--color-surface)] text-gold transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[var(--color-surface)] dark:border-gold/40 dark:bg-cream-dark dark:disabled:hover:bg-cream-dark"
+                          aria-label={t("menuPage.quantityLabel")}
+                        >
+                          <Minus className="h-4 w-4" aria-hidden />
+                        </button>
+                        <span className="min-w-[2rem] text-center font-display text-lg font-semibold tabular-nums text-dark dark:text-dark">
+                          {quantity}
+                        </span>
+                        <button
+                          type="button"
+                          disabled={!selectedSize}
+                          onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold/30 bg-[var(--color-surface)] text-gold transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[var(--color-surface)] dark:border-gold/40 dark:bg-cream-dark dark:disabled:hover:bg-cream-dark"
+                          aria-label={t("menuPage.quantityLabel")}
+                        >
+                          <Plus className="h-4 w-4" aria-hidden />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-8 flex w-full max-w-md flex-col items-center justify-center gap-6 sm:flex-row sm:flex-wrap">
+                    <span className="flex flex-col items-center">
+                      {selectedFlavor && selectedSize && quantity > 1 && (
+                        <span className="text-sm text-dark/70 dark:text-dark-muted">
+                          {tiramisuPrices[selectedFlavor as keyof typeof tiramisuPrices][selectedSize as "P" | "G"]} {t("currency")} × {quantity}
+                        </span>
+                      )}
+                      <span className="font-display text-xl font-semibold text-gold dark:text-gold-light sm:text-2xl">
+                        {selectedFlavor && selectedSize
+                          ? `${(tiramisuPrices[selectedFlavor as keyof typeof tiramisuPrices][selectedSize as "P" | "G"] * quantity)} ${t("currency")}`
+                          : item.price}
+                      </span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleAddVariantToCart}
+                      disabled={!selectedFlavor || !selectedSize}
+                      className={`w-full min-w-[12rem] max-w-xs shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg border py-2.5 px-4 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-offset-[var(--color-surface)] sm:w-auto sm:py-3 sm:text-base ${
+                        added
+                          ? "border-gold/60 bg-gold/20 text-gold"
+                          : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"
+                      }`}
+                    >
+                      {added ? (
+                        <>
+                          <Check className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
+                          {t("cart.addedToCart")}
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
+                          {t("menuPage.addToCart")}
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mt-6 w-full">
+                    <span className="block text-xs font-medium uppercase tracking-wide text-dark/70 dark:text-dark-muted">
+                      {t("menuPage.quantityLabel")}
+                    </span>
+                    <div className="mt-2 flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold/30 bg-[var(--color-surface)] text-gold transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] dark:border-gold/40 dark:bg-cream-dark"
+                        aria-label={t("menuPage.quantityLabel")}
+                      >
+                        <Minus className="h-4 w-4" aria-hidden />
+                      </button>
+                      <span className="min-w-[2rem] text-center font-display text-lg font-semibold tabular-nums text-dark dark:text-dark">
+                        {quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold/30 bg-[var(--color-surface)] text-gold transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] dark:border-gold/40 dark:bg-cream-dark"
+                        aria-label={t("menuPage.quantityLabel")}
+                      >
+                        <Plus className="h-4 w-4" aria-hidden />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-8 flex w-full max-w-md flex-col items-center justify-center gap-6 sm:flex-row sm:flex-wrap">
+                    <span className="flex flex-col items-center">
+                      {item.priceAmount > 0 && quantity > 1 && (
+                        <span className="text-sm text-dark/70 dark:text-dark-muted">
+                          {item.priceAmount} {t("currency")} × {quantity}
+                        </span>
+                      )}
+                      <span className="font-display text-xl font-semibold text-gold dark:text-gold-light sm:text-2xl">
+                        {item.priceAmount > 0 && quantity > 1
+                          ? `${(item.priceAmount * quantity).toFixed(quantity % 1 === 0 ? 0 : 2)} ${t("currency")}`
+                          : item.price}
+                      </span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleAddToCart}
+                    className={`w-full min-w-[12rem] max-w-xs shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg border py-2.5 px-4 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream dark:focus:ring-offset-[var(--color-surface)] sm:w-auto sm:py-3 sm:text-base ${
+                      added
+                        ? "border-gold/60 bg-gold/20 text-gold"
+                        : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"
+                    }`}
+                  >
+                    {added ? (
+                      <>
+                        <Check className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
+                        {t("cart.addedToCart")}
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
+                        {t("menuPage.addToCart")}
+                      </>
+                    )}
+                  </button>
+                  </div>
+                </>
+              )}
             </div>
           </motion.article>
 

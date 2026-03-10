@@ -47,6 +47,8 @@ Baklava • Kunafa • Tradition
 L’art de la kunafa élevé au rang d’excellence.
 Baklava, kunafa, douceurs orientales.
 👇 Menu & commande WhatsApp
+🚚 Livraison disponible
+
 ```
 
 **Conseils :**

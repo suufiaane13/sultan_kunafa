@@ -143,7 +143,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const totalAmount = items.reduce((sum, i) => sum + i.quantity * i.priceAmount, 0);
 
   const orderLines: OrderLine[] = items.map((i) => ({
-    name: t(`products.${i.id}.name`) || i.name,
+    name: /^tiramisu_[^_]+_(P|G)$/.test(i.id) ? i.name : (t(`products.${i.id}.name`) || i.name),
     quantity: i.quantity,
     priceDisplay: `${i.priceAmount} ${t("currency")}`,
     priceAmount: i.priceAmount,

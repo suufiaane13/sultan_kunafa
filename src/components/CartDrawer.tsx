@@ -63,7 +63,7 @@ export function CartDrawer() {
                     >
                       <div className="flex items-start justify-between gap-2">
                         <span className="font-medium text-dark">
-                          {t(`products.${item.id}.name`) || item.name}
+                          {/^tiramisu_[^_]+_(P|G)$/.test(item.id) ? item.name : (t(`products.${item.id}.name`) || item.name)}
                         </span>
                         <span className="font-semibold text-gold">{item.priceAmount} {t("currency")}</span>
                       </div>
