@@ -115,7 +115,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
         {isStarred && (
           <>
             <span
-              className="absolute left-0 top-0 z-10 h-0 w-0 border-[20px] border-gold border-r-transparent border-b-transparent shadow-[2px_2px_4px_rgba(0,0,0,0.15)] sm:border-[24px]"
+              className="absolute left-0 top-0 z-10 h-0 w-0 border-[20px] border-gold border-r-transparent border-b-transparent sm:border-[24px]"
               aria-hidden
             />
             <span
