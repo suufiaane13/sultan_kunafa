@@ -1,5 +1,5 @@
 /**
- * Service Worker — Sultan Kunafa
+ * Service Worker — Sweets
  * Cache les assets pour accélérer les visites et permettre un usage hors-ligne basique.
  * Stratégie : document (HTML) = network-first ; images/CSS/JS = cache-first après 1ère visite.
  */

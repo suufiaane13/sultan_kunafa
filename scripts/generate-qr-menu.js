@@ -15,9 +15,9 @@ const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, "..");
 const publicDir = path.join(rootDir, "public");
-const logoPath = path.join(publicDir, "logo+.png");
+const logoPath = path.join(publicDir, "logo.png");
 
-const MENU_URL = "https://sultan-kunafa.netlify.app/menu";
+const MENU_URL = "https://sweets-48.netlify.app/menu";
 const DEBUG = process.env.DEBUG !== "0" && process.env.DEBUG !== "false";
 const log = (...args) => DEBUG && console.log("[qr]", ...args);
 const debug = (...args) => DEBUG && console.debug("[qr:debug]", ...args);
@@ -70,8 +70,10 @@ async function main() {
   debug("import qr-code-styling...");
   const QRCodeStyling = require("qr-code-styling").default ?? require("qr-code-styling");
 
-  const svgPath = path.join(publicDir, "qr-menu.svg");
-  const pngPath = path.join(publicDir, "qr-menu.png");
+  const qrDir = path.join(publicDir, "qr");
+  if (!fs.existsSync(qrDir)) fs.mkdirSync(qrDir, { recursive: true });
+  const svgPath = path.join(qrDir, "qr-menu.svg");
+  const pngPath = path.join(qrDir, "qr-menu.png");
   debug("sorties:", { svgPath, pngPath });
 
   // SVG (toujours)

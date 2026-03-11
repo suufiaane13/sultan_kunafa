@@ -15,7 +15,7 @@ function fileName(ext: string): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
-  return `Sultan-Kunafa-Ventes-${y}-${m}-${day}.${ext}`;
+  return `SWEETŞ-Ventes-${y}-${m}-${day}.${ext}`;
 }
 
 /** Export ventes en Excel (SheetJS) — colonnes selon la locale */
@@ -72,7 +72,7 @@ export function exportToPdf(ventes: VenteJour[], periodLabel: string, locale: Lo
   doc.setFont("helvetica");
   doc.setFontSize(18);
   doc.setTextColor(40, 30, 15);
-  doc.text("Sultan Kunafa", 14, 18);
+  doc.text("SWEETŞ", 14, 18);
   doc.setFontSize(11);
   doc.setTextColor(80, 70, 60);
   doc.text(historyTitle, 14, 25);

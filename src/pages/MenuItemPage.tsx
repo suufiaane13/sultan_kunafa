@@ -1,14 +1,14 @@
 import { useParams, useLocation, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Minus, Plus, Heart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, UtensilsCrossed, Minus, Plus, Heart, Star } from "lucide-react";
 import { useState } from "react";
 import type { MenuItem } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
 import { useFavorites } from "@/context/FavoritesContext";
-import { site, starredProductIds, tiramisuFlavorIds, tiramisuPrices, tiramisuSizeIds } from "@/content/site";
+import { site, starredProductIds, tiramisuFlavorIds, tiramisuFlavorImages, tiramisuPrices, tiramisuSizeIds } from "@/content/site";
 
-const DEFAULT_PRODUCT_IMAGE = "/photo.png";
+const DEFAULT_PRODUCT_IMAGE = "/photos/photo.png";
 
 function imageBase(path: string): string | null {
   if (!path || path === DEFAULT_PRODUCT_IMAGE) return null;
@@ -135,13 +135,22 @@ export function MenuItemPage() {
                 <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
               </button>
               {isStarred && (
-                <span
-                  className="absolute left-0 top-0 z-10 h-0 w-0 border-[24px] border-gold border-r-transparent border-b-transparent shadow-[2px_2px_6px_rgba(0,0,0,0.2)] sm:border-[28px]"
-                  aria-label={t("featured.title")}
-                />
+                <>
+                  <span
+                    className="absolute left-0 top-0 z-10 h-0 w-0 border-[24px] border-gold border-r-transparent border-b-transparent sm:border-[28px]"
+                    aria-hidden
+                  />
+                  <span
+                    className="absolute left-1.5 top-1.5 z-20 flex items-center justify-center sm:left-2 sm:top-2"
+                    aria-label={t("featured.title")}
+                  >
+                    <Star className="h-4 w-4 fill-[#2B1D0E] text-[#2B1D0E] sm:h-5 sm:w-5 dark:fill-[#2B1D0E] dark:text-[#2B1D0E]" aria-hidden />
+                  </span>
+                </>
               )}
+              <div className="flex h-full w-full items-center justify-center">
               {webpSrc ? (
-                <picture>
+                <picture className="flex h-full w-full items-center justify-center">
                   <source
                     srcSet={webpSet ?? webpSrc}
                     type="image/webp"
@@ -150,7 +159,7 @@ export function MenuItemPage() {
                   <img
                     src={imageSrc}
                     alt={item.name}
-                    className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full scale-125 object-contain object-center transition-transform duration-500 group-hover:scale-[1.3]"
                     style={imgStyle}
                     loading="eager"
                     decoding="async"
@@ -162,7 +171,7 @@ export function MenuItemPage() {
                 <img
                   src={imageSrc}
                   alt={item.name}
-                  className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full scale-125 object-contain object-center transition-transform duration-500 group-hover:scale-[1.3]"
                   style={imgStyle}
                   loading="eager"
                   decoding="async"
@@ -170,6 +179,7 @@ export function MenuItemPage() {
                   onContextMenu={(e) => e.preventDefault()}
                 />
               )}
+            </div>
             </div>
 
             {/* Contenu : description, prix ou parfums/tailles, CTA — centré et rangé */}
@@ -181,31 +191,77 @@ export function MenuItemPage() {
 
               {hasVariants ? (
                 <>
-                  <p className="mt-4 max-w-md text-sm font-medium text-gold dark:text-gold-light">
-                    {t("products.tiramisu.description")}
-                  </p>
                   <div className="mt-5 w-full max-w-lg">
                     <span className="block text-xs font-medium uppercase tracking-wide text-dark/70 dark:text-dark-muted">
                       {t("menuPage.flavorLabel")}
                     </span>
-                    <div className="mt-2 flex flex-wrap justify-center gap-2">
-                      {tiramisuFlavorIds.map((flavorId) => (
-                        <button
-                          key={flavorId}
-                          type="button"
-                          onClick={() => {
-                          setSelectedFlavor(flavorId);
-                          setSelectedSize(null);
-                        }}
-                          className={`rounded-lg border px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] ${
-                            selectedFlavor === flavorId
-                              ? "border-gold bg-gold/20 text-gold"
-                              : "border-gold/30 bg-transparent text-dark hover:bg-gold/10 dark:text-dark-muted dark:hover:bg-gold/15"
-                          }`}
-                        >
-                          {t(`products.tiramisu.flavors.${flavorId}`)}
-                        </button>
-                      ))}
+                    <div className="mt-2 flex flex-col gap-2 sm:gap-2.5">
+                      <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+                        {tiramisuFlavorIds.slice(0, 6).map((flavorId) => (
+                          <button
+                            key={flavorId}
+                            type="button"
+                            onClick={() => {
+                              setSelectedFlavor(flavorId);
+                              setSelectedSize(null);
+                            }}
+                            className={`flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] ${
+                              selectedFlavor === flavorId
+                                ? "border-gold bg-gold/10 shadow-md ring-2 ring-gold/30"
+                                : "border-gold/30 bg-cream/80 hover:border-gold/50 hover:bg-gold/5 dark:border-gold/20 dark:bg-cream-dark/80 dark:hover:border-gold/40"
+                            }`}
+                            aria-label={t(`products.tiramisu.flavors.${flavorId}`)}
+                            aria-pressed={selectedFlavor === flavorId}
+                          >
+                            <picture className="flex h-full w-full items-center justify-center">
+                              <source
+                                srcSet={tiramisuFlavorImages[flavorId].replace(/\.(png|jpe?g)$/i, ".webp")}
+                                type="image/webp"
+                              />
+                              <img
+                                src={tiramisuFlavorImages[flavorId]}
+                                alt=""
+                                className="max-h-[85%] max-w-[85%] object-contain"
+                                loading="lazy"
+                                draggable={false}
+                              />
+                            </picture>
+                          </button>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+                        {tiramisuFlavorIds.slice(6, 9).map((flavorId) => (
+                          <button
+                            key={flavorId}
+                            type="button"
+                            onClick={() => {
+                              setSelectedFlavor(flavorId);
+                              setSelectedSize(null);
+                            }}
+                            className={`flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-surface)] ${
+                              selectedFlavor === flavorId
+                                ? "border-gold bg-gold/10 shadow-md ring-2 ring-gold/30"
+                                : "border-gold/30 bg-cream/80 hover:border-gold/50 hover:bg-gold/5 dark:border-gold/20 dark:bg-cream-dark/80 dark:hover:border-gold/40"
+                            }`}
+                            aria-label={t(`products.tiramisu.flavors.${flavorId}`)}
+                            aria-pressed={selectedFlavor === flavorId}
+                          >
+                            <picture className="flex h-full w-full items-center justify-center">
+                              <source
+                                srcSet={tiramisuFlavorImages[flavorId].replace(/\.(png|jpe?g)$/i, ".webp")}
+                                type="image/webp"
+                              />
+                              <img
+                                src={tiramisuFlavorImages[flavorId]}
+                                alt=""
+                                className="max-h-[85%] max-w-[85%] object-contain"
+                                loading="lazy"
+                                draggable={false}
+                              />
+                            </picture>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <div className="mt-5 w-full max-w-lg grid grid-cols-1 gap-4 sm:grid-cols-2">

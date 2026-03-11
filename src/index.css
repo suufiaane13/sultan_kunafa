@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Sultan Kunafa — palette pro (chocolat, or, crème) */
+  /* Sweets — palette pro (chocolat, or, crème) */
   --color-dark: #0f0804;
   --color-dark-muted: #1a0f0a;
   --color-cream: #faf6f1;
@@ -102,7 +102,7 @@
   }
 }
 
-/* Scrollbar pro — palette Sultan Kunafa (or / crème), fin et discret */
+/* Scrollbar pro — palette Sweets (or / crème), fin et discret */
 html {
   scrollbar-width: thin;
   scrollbar-color: rgba(201, 155, 45, 0.5) rgba(201, 155, 45, 0.08);

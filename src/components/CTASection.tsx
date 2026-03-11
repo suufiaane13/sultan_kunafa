@@ -19,7 +19,7 @@ export function CTASection() {
       {/* Photo kunafa en fond */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat select-none"
-        style={{ backgroundImage: "url(/kunafa.png)", WebkitUserSelect: "none", userSelect: "none" }}
+        style={{ backgroundImage: "url(/photos/kunafa.png)", WebkitUserSelect: "none", userSelect: "none" }}
         aria-hidden
         onContextMenu={(e) => e.preventDefault()}
       />

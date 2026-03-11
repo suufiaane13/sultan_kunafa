@@ -75,7 +75,7 @@ export function FloatingSocial() {
               rel="noopener noreferrer"
               role="menuitem"
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#E4405F] transition-colors hover:bg-[#E4405F]/15 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] dark:focus:ring-offset-[var(--color-surface)]"
-              aria-label="Instagram Sultan Kunafa"
+              aria-label="Instagram SWEETŞ"
               data-ga-event="instagram_float_click"
             >
               <InstagramIcon className="h-5 w-5" aria-hidden />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const LOGO_SRC = "/logo+.png";
+const LOGO_SRC = "/logo.png";
 const MIN_DISPLAY_MS = 1200;
 const MAX_WAIT_MS = 4000;
 const FADE_OUT_DURATION = 0.5;
@@ -68,7 +68,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
         >
           <img
             src={LOGO_SRC}
-            alt="Sultan Kunafa"
+            alt="SWEETŞ"
             className="h-44 w-44 object-contain sm:h-56 sm:w-56 md:h-72 md:w-72 lg:h-80 lg:w-80 xl:h-96 xl:w-96"
             width={384}
             height={384}

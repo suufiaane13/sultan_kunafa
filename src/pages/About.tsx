@@ -56,9 +56,9 @@ export function About() {
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
                 <picture>
-                  <source type="image/webp" srcSet="/avatar-ahmed.webp" />
+                  <source type="image/webp" srcSet="/avatars/avatar-ahmed.webp" />
                   <img
-                    src="/avatar-ahmed.png"
+                    src="/avatars/avatar-ahmed.png"
                     alt=""
                     className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar1Loaded ? "opacity-100" : "opacity-0"} scale-110`}
                     width={96}
@@ -85,9 +85,9 @@ export function About() {
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
                 <picture>
-                  <source type="image/webp" srcSet="/avatar-haroun.webp" />
+                  <source type="image/webp" srcSet="/avatars/avatar-haroun.webp" />
                   <img
-                    src="/avatar-haroun.png"
+                    src="/avatars/avatar-haroun.png"
                     alt=""
                     className={`h-full w-full object-cover transition-opacity duration-300 ${avatar2Loaded ? "opacity-100" : "opacity-0"}`}
                     width={96}
@@ -114,9 +114,9 @@ export function About() {
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
                 <picture>
-                  <source type="image/webp" srcSet="/avatar-soufiane.webp" />
+                  <source type="image/webp" srcSet="/avatars/avatar-soufiane.webp" />
                   <img
-                    src="/avatar-soufiane.png"
+                    src="/avatars/avatar-soufiane.png"
                     alt=""
                     className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar3Loaded ? "opacity-100" : "opacity-0"}`}
                     width={96}

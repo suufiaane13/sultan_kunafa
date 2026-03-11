@@ -1,4 +1,4 @@
-Dossier des photos du menu — Sultan Kunafa
+Dossier des photos du menu — Sweets
 ===========================================
 
 Placez ici les images des produits avec les noms exacts ci-dessous.

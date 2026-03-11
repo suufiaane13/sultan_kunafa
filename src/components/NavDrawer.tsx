@@ -88,7 +88,7 @@ export function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                     <Icon className="h-5 w-5 shrink-0 opacity-80" aria-hidden />
                     {t(labelKey)}
                     {showFavCount && (
-                      <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[11px] font-bold tabular-nums text-white rtl:ml-0 rtl:mr-auto">
+                      <span className="font-display ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[10px] font-bold tabular-nums text-white rtl:ml-0 rtl:mr-auto">
                         {favoritesCount > 99 ? "99+" : favoritesCount}
                       </span>
                     )}
@@ -104,7 +104,7 @@ export function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                 <ShoppingBag className="h-5 w-5 shrink-0 opacity-80" aria-hidden />
                 {t("cart.title")}
                 {totalCount > 0 && !cartOpen && (
-                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[11px] font-bold tabular-nums text-white rtl:ml-0 rtl:mr-auto">
+                  <span className="font-display ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[10px] font-bold tabular-nums text-white rtl:ml-0 rtl:mr-auto">
                     {totalCount > 99 ? "99+" : totalCount}
                   </span>
                 )}

@@ -11,16 +11,14 @@ export function Hero() {
       className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-inverse-bg px-4 text-on-inverse sm:min-h-[75vh] md:min-h-[85vh]"
       aria-label="Hero"
     >
-      {/* Hero : hero.jpeg (plateau pâtisseries) avec léger flou. Après npm run optimize-images, hero.webp sera généré. */}
       <img
-        src="/hero.jpeg"
+        src="/hero/hero.jpeg"
         alt=""
         className="absolute inset-0 h-full w-full scale-105 object-cover object-center blur-[3px]"
         width={1920}
         height={1080}
         loading="eager"
-        // @ts-expect-error fetchpriority (minuscules) requis par le DOM ; les types React n'ont que fetchPriority
-        fetchpriority="high"
+        fetchPriority="high"
         draggable={false}
         onContextMenu={(e) => e.preventDefault()}
         aria-hidden

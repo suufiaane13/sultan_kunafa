@@ -76,7 +76,7 @@ export function Navbar() {
             : "border-gold/20 bg-[var(--color-cream)]/95 text-dark dark:border-gold/30 dark:bg-[var(--color-cream-dark)]/95"
         }`}
       >
-        <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 md:px-6 md:py-3.5 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 py-1.5 sm:px-6 sm:py-1.5 md:px-6 md:py-1.5 lg:px-8">
           <div className="flex items-center justify-between gap-4 md:gap-6">
           <Link
             to="/"
@@ -86,14 +86,14 @@ export function Navbar() {
               }
             }}
             className="flex shrink-0 items-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] rounded-lg"
-            aria-label="Sultan Kunafa"
+            aria-label="SWEETŞ"
           >
             <img
-              src="/logo.png"
+              src="/logo-navbar.png"
               alt=""
-              className="h-9 w-9 object-contain sm:h-10 sm:w-10 md:h-11 md:w-11"
-              width={44}
-              height={44}
+              className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+              width={80}
+              height={80}
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}
             />
@@ -127,7 +127,7 @@ export function Navbar() {
                   <Icon className="relative h-4 w-4 shrink-0 opacity-90" aria-hidden />
                   <span className="relative">{t(labelKey)}</span>
                   {showFavCount && (
-                    <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold tabular-nums text-white">
+                    <span className="font-display absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[10px] font-bold tabular-nums text-white">
                       {favoritesCount > 99 ? "99+" : favoritesCount}
                     </span>
                   )}
@@ -143,14 +143,14 @@ export function Navbar() {
             <button
               type="button"
               onClick={openCart}
-              className={`relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] md:h-11 md:w-11 ${
+              className={`relative flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] ${
                 headerOverHero ? "text-[var(--color-on-inverse)]/90" : "text-dark/80 dark:text-dark-muted"
               } ${cartBump ? "cart-bump" : ""}`}
               aria-label={t("cart.title")}
             >
               <ShoppingBag className="h-5 w-5 shrink-0" aria-hidden />
               {totalCount > 0 && !cartOpen && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold tabular-nums text-white">
+                <span className="font-display absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[10px] font-bold tabular-nums text-white">
                   {totalCount > 99 ? "99+" : totalCount}
                 </span>
               )}
@@ -158,20 +158,20 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className={`relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] md:hidden ${
+              className={`relative flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-gold/15 hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-[var(--color-cream)] md:hidden ${
                 headerOverHero ? "text-[var(--color-on-inverse)]/90" : "text-dark/80 dark:text-dark-muted"
               }`}
               aria-label={t("navDrawer.title")}
               aria-expanded={drawerOpen}
             >
-              <Menu className="h-5 w-5" aria-hidden />
+              <Menu className="h-5 w-5 shrink-0" aria-hidden />
               {favoritesCount > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold tabular-nums text-white">
-                  {favoritesCount > 99 ? "99+" : favoritesCount}
-                </span>
-              )}
-            </button>
-          </div>
+<span className="font-display absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[10px] font-bold tabular-nums text-white">
+                {favoritesCount > 99 ? "99+" : favoritesCount}
+              </span>
+            )}
+          </button>
+        </div>
           </div>
         </div>
       </header>

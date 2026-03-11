@@ -17,14 +17,14 @@ export function Footer() {
           <Link
             to="/"
             className="flex shrink-0 items-center"
-            aria-label="Sultan Kunafa"
+            aria-label="SWEETŞ"
           >
             <img
-              src="/logo.png"
-              alt="Sultan Kunafa"
-              className="h-14 w-14 object-contain md:h-16 md:w-16"
-              width={64}
-              height={64}
+              src="/logo-navbar.png"
+              alt="Sweets"
+              className="h-20 w-20 object-contain md:h-24 md:w-24"
+              width={96}
+              height={96}
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}
             />
@@ -37,7 +37,7 @@ export function Footer() {
                 <Link
                   key={to}
                   to={to}
-                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-gold md:text-base ${
+                  className={`font-display flex items-center gap-2 text-sm font-medium tracking-wide transition-colors hover:text-gold md:text-base ${
                     isActive ? "text-gold" : "text-on-inverse/90"
                   }`}
                   aria-current={isActive ? "page" : undefined}
@@ -50,8 +50,8 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-8 flex flex-col items-center gap-0.5 border-t border-gold/10 pt-6 text-center text-sm text-on-inverse/70 md:flex-row md:items-baseline md:gap-x-1 md:text-left rtl:md:text-right">
-          <span>© {new Date().getFullYear()} Sultan Kunafa.</span>
+        <div className="font-display mt-8 flex flex-col items-center gap-0.5 border-t border-gold/10 pt-6 text-center text-sm tracking-wide text-on-inverse/70 md:flex-row md:items-baseline md:gap-x-1 md:text-left rtl:md:text-right">
+          <span>© {new Date().getFullYear()} SWEETŞ.</span>
           <span>{t("footer.copyright")}</span>
         </div>
       </div>

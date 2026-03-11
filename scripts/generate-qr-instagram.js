@@ -69,8 +69,10 @@ async function main() {
   const { JSDOM } = await import("jsdom");
   const QRCodeStyling = require("qr-code-styling").default ?? require("qr-code-styling");
 
-  const svgPath = path.join(publicDir, "qr-instagram.svg");
-  const pngPath = path.join(publicDir, "qr-instagram.png");
+  const qrDir = path.join(publicDir, "qr");
+  if (!fs.existsSync(qrDir)) fs.mkdirSync(qrDir, { recursive: true });
+  const svgPath = path.join(qrDir, "qr-instagram.svg");
+  const pngPath = path.join(qrDir, "qr-instagram.png");
   debug("sorties:", { svgPath, pngPath });
 
   log("génération SVG...");

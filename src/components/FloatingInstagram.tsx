@@ -8,7 +8,7 @@ export function FloatingInstagram() {
       target="_blank"
       rel="noopener noreferrer"
       className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white shadow-lg shadow-[#833AB4]/30 transition-transform hover:scale-110 hover:shadow-xl hover:shadow-[#833AB4]/40 focus:outline-none focus:ring-4 focus:ring-[#833AB4]/50"
-      aria-label="Instagram Sultan Kunafa"
+      aria-label="Instagram SWEETŞ"
       data-ga-event="instagram_float_click"
     >
       <InstagramIcon className="h-6 w-6" />

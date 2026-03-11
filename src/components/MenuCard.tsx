@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, Check, Heart, ChevronRight } from "lucide-react";
+import { ShoppingCart, Check, Heart, ChevronRight, Star } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { starredProductIds } from "@/content/site";
 import { useFavorites } from "@/context/FavoritesContext";
@@ -28,9 +28,11 @@ interface MenuCardProps {
   linkState?: Record<string, unknown>;
   /** CTA de détail (ex. "Choisir le goût") quand pas d'ajout direct */
   detailCtaLabel?: string;
+  /** Affichage liste : image à gauche, contenu à droite (page Menu) */
+  layout?: "card" | "list";
 }
 
-const DEFAULT_PRODUCT_IMAGE = "/photo.png";
+const DEFAULT_PRODUCT_IMAGE = "/photos/photo.png";
 
 /** Base URL sans extension (ex. /photos/kunafa_nutella). */
 function imageBase(path: string): string | null {
@@ -52,7 +54,7 @@ function webpSrcSet(path: string): string | null {
   return `${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1200w`;
 }
 
-export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false, linkState, detailCtaLabel }: MenuCardProps) {
+export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false, linkState, detailCtaLabel, layout = "card" }: MenuCardProps) {
   const { t } = useLocale();
   const { isFavorite, toggle } = useFavorites();
   const [added, setAdded] = useState(false);
@@ -86,34 +88,46 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
   const isStarred = starredProductIds.includes(item.id as (typeof starredProductIds)[number]);
   const favorite = isFavorite(item.id);
 
+  const isList = layout === "list";
+
   return (
     <motion.article
-      className="group relative overflow-hidden rounded-xl border border-gold/20 bg-cream shadow-lg transition-shadow hover:shadow-xl md:rounded-2xl"
+      className={`group relative overflow-hidden rounded-xl border border-gold/20 bg-cream shadow-lg transition-shadow hover:shadow-xl md:rounded-2xl ${isList ? "flex flex-row items-stretch" : ""}`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
-      whileHover={{ y: -4 }}
+      whileHover={isList ? undefined : { y: -4 }}
     >
-      <button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggle(item.id);
-        }}
-        className="absolute right-2 top-2 z-10 rounded-full bg-cream/95 p-1.5 shadow-md transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold/50 dark:bg-dark/80 dark:hover:bg-gold/15"
-        aria-label={favorite ? t("favorites.remove") : t("favorites.add")}
-      >
-        <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
-      </button>
-      {isStarred && (
-        <span
-          className="absolute left-0 top-0 z-10 h-0 w-0 border-[20px] border-gold border-r-transparent border-b-transparent shadow-[2px_2px_4px_rgba(0,0,0,0.15)] sm:border-[24px]"
-          aria-label={t("featured.title")}
-        />
-      )}
-      <div className={`flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""}`}>
+      <div className={isList ? "relative shrink-0 w-28 sm:w-36" : "contents"}>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggle(item.id);
+          }}
+          className="absolute right-2 top-2 z-10 rounded-full bg-cream/95 p-1.5 shadow-md transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold/50 dark:bg-dark/80 dark:hover:bg-gold/15"
+          aria-label={favorite ? t("favorites.remove") : t("favorites.add")}
+        >
+          <Heart className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${favorite ? "fill-gold text-gold" : "text-gold"}`} aria-hidden />
+        </button>
+        {isStarred && (
+          <>
+            <span
+              className="absolute left-0 top-0 z-10 h-0 w-0 border-[20px] border-gold border-r-transparent border-b-transparent shadow-[2px_2px_4px_rgba(0,0,0,0.15)] sm:border-[24px]"
+              aria-hidden
+            />
+            <span
+              className="absolute left-1.5 top-1.5 z-20 flex items-center justify-center sm:left-2 sm:top-2"
+              aria-label={t("featured.title")}
+            >
+              <Star className="h-3.5 w-3.5 fill-[#2B1D0E] text-[#2B1D0E] sm:h-4 sm:w-4 dark:fill-[#2B1D0E] dark:text-[#2B1D0E]" aria-hidden />
+            </span>
+          </>
+        )}
+        <div className={`relative flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""} ${isList ? "sm:aspect-square" : ""}`}>
+        <div className="absolute inset-0 z-[1] bg-gradient-to-t from-dark/10 via-transparent to-transparent pointer-events-none" aria-hidden />
         {linkToDetail ? (
           <Link
             to={`/menu/${item.id}`}
@@ -191,7 +205,8 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
           </>
         )}
       </div>
-      <div className="p-3 sm:p-4 md:p-5">
+      </div>
+      <div className={`p-3 sm:p-4 md:p-5 ${isList ? "flex min-w-0 flex-1 flex-col justify-center" : ""}`}>
         {/* Mobile : nom pleine largeur (1 ligne), prix en dessous — Desktop : nom + prix sur une ligne */}
         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
           {linkToDetail ? (

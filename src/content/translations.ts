@@ -28,7 +28,7 @@ const translations = {
       emptyHint: "Appuyez sur le cœur d’un produit pour l’ajouter ici.",
     },
     hero: {
-      title: "SULTAN KUNAFA",
+      title: "SWEETŞ",
       subtitle: "L'art de la kunafa élevé au rang d'excellence.",
       ctaLabel: "Découvrir le menu",
     },
@@ -50,13 +50,17 @@ const translations = {
       filterKunafa: "Kunafa",
       filterDesserts: "Desserts",
       filterSearchPlaceholder: "Rechercher un plat…",
+      viewLabel: "Mode d'affichage",
+      viewGrid: "Grille",
+      viewList: "Liste",
+      viewFeatured: "Grandes cartes",
     },
     aboutPage: {
       title: "Notre histoire",
       subtitle: "L'excellence au cœur de chaque création",
-      heading: "SULTAN KUNAFA",
+      heading: "SWEETS",
       foundersTitle: "Les fondateurs",
-      foundersIntro: "SULTAN KUNAFA est née de la rencontre de deux passionnés, déterminés à réinventer la pâtisserie orientale avec exigence et authenticité.",
+      foundersIntro: "SWEETŞ est née de la rencontre de deux passionnés, déterminés à réinventer la pâtisserie orientale avec exigence et authenticité.",
       founder1Name: "Ahmed BERKOUKI",
       founder1Role: "Co-fondateur",
       founder2Name: "Haroun SOULIMANI",
@@ -67,7 +71,7 @@ const translations = {
       openInMaps: "Ouvrir dans Google Maps",
     },
     about: {
-      text: "Chaque pièce Sultan est façonnée selon un savoir-faire ancestral, revisité avec une précision moderne pour offrir une expérience gustative hors du commun.",
+      text: "Chaque pièce SWEETŞ est façonnée selon un savoir-faire ancestral, revisité avec une précision moderne pour offrir une expérience gustative hors du commun.",
     },
     cta: {
       title: "Prêt à savourer ?",
@@ -75,7 +79,7 @@ const translations = {
       buttonLabel: "Commander sur WhatsApp",
     },
     contact: {
-      whatsappMessageDefault: "Bonjour, je souhaite passer commande chez Sultan Kunafa.",
+      whatsappMessageDefault: "Bonjour, je souhaite passer commande chez SWEETŞ.",
       orderIntro: "Voici ma commande :",
       totalLabel: "Total",
     },
@@ -188,7 +192,7 @@ const translations = {
       },
       kunafa_mini_nid_amandes: {
         name: "Kunafa mini nid amandes",
-        description: "Mini nid aux amandes, portion individuelle.",
+        description: "Roulé Mini nid aux amandes, portion individuelle.",
         descriptionShort: "Mini nid amandes",
       },
       kunafa_roll_nid_mix: {
@@ -224,6 +228,7 @@ const translations = {
           kinder: "Kinder",
           blueberry: "Blueberry",
           mango: "Mango",
+          kitkat: "Kit Kat",
         },
         sizeP: "P",
         sizeG: "G",
@@ -253,7 +258,7 @@ const translations = {
       emptyHint: "اضغط على أيقونة القلب لإضافة المنتج هنا.",
     },
     hero: {
-      title: "كنافة الملوك",
+      title: "سويتس",
       subtitle: "فن الكنافة في أرقى تجلّياته.",
       ctaLabel: "اكتشف القائمة",
     },
@@ -274,13 +279,17 @@ const translations = {
       filterBaklava: "بقلاوة",
       filterKunafa: "كنافة",
       filterSearchPlaceholder: "ابحث عن طبق…",
+      viewLabel: "طريقة العرض",
+      viewGrid: "شبكة",
+      viewList: "قائمة",
+      viewFeatured: "بطاقات كبيرة",
     },
     aboutPage: {
       title: "قصّتنا",
       subtitle: "التميّز في صميم كل تجربة",
-      heading: "كنافة الملوك",
+      heading: "سويتس",
       foundersTitle: "المؤسسان",
-      foundersIntro: "وُلدت كنافة الملوك من لقاء شغوفَين، عازمَين على إعادة اختراع الحلوى الشرقية بمعايير الإتقان والأصالة.",
+      foundersIntro: "وُلدت سويتس من لقاء شغوفَين، عازمَين على إعادة اختراع الحلوى الشرقية بمعايير الإتقان والأصالة.",
       founder1Name: "أحمد برقوقي",
       founder1Role: "المؤسس",
       founder2Name: "هارون سليماني",
@@ -412,7 +421,7 @@ const translations = {
       },
       kunafa_mini_nid_amandes: {
         name: "كنافة ميني عش لوز",
-        description: "عش صغير باللوز، حصة فردية.",
+        description: "رول عش صغير باللوز، حصة فردية.",
         descriptionShort: "ميني عش لوز",
       },
       kunafa_roll_nid_mix: {
@@ -432,7 +441,7 @@ const translations = {
       },
       tartelette: {
         name: "تارتليت",
-        description: "تارتليت لذيذة بالفواكه.",
+        description: "تارت ليت لذيذة بالفواكه.",
         descriptionShort: "تارتليت",
       },
       tiramisu: {
@@ -448,6 +457,7 @@ const translations = {
           kinder: "كندر",
           blueberry: "توت أزرق",
           mango: "مانغو",
+          kitkat: "كيت كات",
         },
         sizeP: "ص",
         sizeG: "ك",
