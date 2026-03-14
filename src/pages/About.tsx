@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Info, Users, MapPin } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { site } from "@/content/site";
+import { AnimatedAvatar } from "@/components/AnimatedAvatar";
 
 export function About() {
   const { t } = useLocale();
@@ -113,19 +114,14 @@ export function About() {
                 {!avatar3Loaded && (
                   <div className="absolute inset-0 rounded-full animate-pulse bg-gold/20 dark:bg-gold/25" aria-hidden />
                 )}
-                <picture>
-                  <source type="image/webp" srcSet="/avatars/avatar-soufiane.webp" />
-                  <img
-                    src="/avatars/avatar-soufiane.png"
-                    alt=""
-                    className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar3Loaded ? "opacity-100" : "opacity-0"}`}
-                    width={96}
-                    height={96}
-                    loading="lazy"
-                    decoding="async"
-                    onLoad={() => setAvatar3Loaded(true)}
-                  />
-                </picture>
+                <AnimatedAvatar
+                  staticSrc="/avatars/avatar-soufiane.png"
+                  staticWebp="/avatars/avatar-soufiane.webp"
+                  className={`h-full w-full object-cover object-center transition-opacity duration-300 ${avatar3Loaded ? "opacity-100" : "opacity-0"}`}
+                  width={96}
+                  height={96}
+                  onLoad={() => setAvatar3Loaded(true)}
+                />
               </div>
               <h3 className="mt-4 font-display text-base font-semibold text-dark sm:mt-5 sm:text-xl">
                 {t("aboutPage.founder3Name")}

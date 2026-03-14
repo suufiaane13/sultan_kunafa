@@ -28,8 +28,8 @@ interface MenuCardProps {
   linkState?: Record<string, unknown>;
   /** CTA de détail (ex. "Choisir le goût") quand pas d'ajout direct */
   detailCtaLabel?: string;
-  /** Affichage liste : image à gauche, contenu à droite (page Menu) */
-  layout?: "card" | "list";
+  /** Affichage liste : image à gauche. Grandes cartes : image + typo premium. */
+  layout?: "card" | "list" | "featured";
 }
 
 const DEFAULT_PRODUCT_IMAGE = "/photos/photo.png";
@@ -84,20 +84,28 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
         ? { width: "82%", height: "82%", marginLeft: "8%" }
         : item.id === "tiramisu" || item.id === "flan"
           ? { marginTop: "-6%" }
-        : undefined;
+          : undefined;
   const isStarred = starredProductIds.includes(item.id as (typeof starredProductIds)[number]);
   const favorite = isFavorite(item.id);
 
   const isList = layout === "list";
+  const isFeatured = layout === "featured";
+  const imageSizes = isFeatured
+    ? "(max-width: 1024px) 100vw, 480px"
+    : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px";
 
   return (
     <motion.article
-      className={`group relative overflow-hidden rounded-xl border border-gold/20 bg-cream shadow-lg transition-shadow hover:shadow-xl md:rounded-2xl ${isList ? "flex flex-row items-stretch" : ""}`}
+      className={`group relative overflow-hidden rounded-xl border bg-cream transition-shadow md:rounded-2xl ${
+        isFeatured
+          ? "border-gold/30 shadow-xl hover:shadow-2xl"
+          : `border-gold/20 shadow-lg hover:shadow-xl ${isList ? "flex flex-row items-stretch" : ""}`
+      }`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
-      whileHover={isList ? undefined : { y: -4 }}
+      whileHover={isList ? undefined : { y: isFeatured ? -6 : -4 }}
     >
       <div className={isList ? "relative shrink-0 w-28 sm:w-36" : "contents"}>
         <button
@@ -126,7 +134,15 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
             </span>
           </>
         )}
-        <div className={`relative flex aspect-square items-center justify-center overflow-hidden bg-cream-dark/60 sm:aspect-[4/3] ${linkToDetail ? "cursor-pointer" : ""} ${isList ? "sm:aspect-square" : ""}`}>
+        <div
+          className={`relative flex items-center justify-center overflow-hidden bg-cream-dark/60 ${linkToDetail ? "cursor-pointer" : ""} ${
+            isList
+              ? "aspect-square sm:aspect-square"
+              : isFeatured
+                ? "aspect-[4/3] sm:aspect-[3/2]"
+                : "aspect-square sm:aspect-[4/3]"
+          }`}
+        >
         <div className="absolute inset-0 z-[1] bg-gradient-to-t from-dark/10 via-transparent to-transparent pointer-events-none" aria-hidden />
         {linkToDetail ? (
           <Link
@@ -140,7 +156,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
                 <source
                   srcSet={webpSet ?? webpSrc}
                   type="image/webp"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
+                  sizes={imageSizes}
                 />
                 <img
                   src={imageSrc}
@@ -175,7 +191,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
                 <source
                   srcSet={webpSet ?? webpSrc}
                   type="image/webp"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
+                  sizes={imageSizes}
                 />
                 <img
                   src={imageSrc}
@@ -206,7 +222,15 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
         )}
       </div>
       </div>
-      <div className={`p-3 sm:p-4 md:p-5 ${isList ? "flex min-w-0 flex-1 flex-col justify-center" : ""}`}>
+      <div
+        className={
+          isList
+            ? "flex min-w-0 flex-1 flex-col justify-center p-3 sm:p-4 md:p-5"
+            : isFeatured
+              ? "p-4 sm:p-5 md:p-6"
+              : "p-3 sm:p-4 md:p-5"
+        }
+      >
         {/* Mobile : nom pleine largeur (1 ligne), prix en dessous — Desktop : nom + prix sur une ligne */}
         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
           {linkToDetail ? (
@@ -217,7 +241,11 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
               className="min-w-0 flex-1 sm:flex-1"
             >
               <h3
-                className="flex min-w-0 items-center gap-1 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark hover:text-gold sm:text-base sm:tracking-normal md:text-xl"
+                className={`flex min-w-0 items-center gap-1 truncate font-display font-semibold leading-snug tracking-tight text-dark hover:text-gold ${
+                  isFeatured
+                    ? "text-base sm:text-lg md:text-xl lg:text-2xl sm:tracking-normal"
+                    : "text-xs sm:text-base sm:tracking-normal md:text-xl"
+                }`}
                 title={item.name}
               >
                 {item.name}
@@ -225,14 +253,20 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
             </Link>
           ) : (
             <h3
-              className="flex min-w-0 items-center gap-1 truncate font-display text-xs font-semibold leading-snug tracking-tight text-dark sm:flex-1 sm:text-base sm:tracking-normal md:text-xl"
+              className={`flex min-w-0 items-center gap-1 truncate font-display font-semibold leading-snug tracking-tight text-dark sm:flex-1 ${
+                isFeatured
+                  ? "text-base sm:text-lg md:text-xl lg:text-2xl sm:tracking-normal"
+                  : "text-xs sm:text-base sm:tracking-normal md:text-xl"
+              }`}
               title={item.name}
             >
               {item.name}
             </h3>
           )}
           {item.price ? (
-            <span className="shrink-0 text-xs font-semibold text-gold sm:text-sm md:text-base">
+            <span
+              className={`shrink-0 font-semibold text-gold ${isFeatured ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base"}`}
+            >
               {item.price}
             </span>
           ) : null}
@@ -242,7 +276,9 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
           <button
             type="button"
             onClick={handleAdd}
-            className={`mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border py-2 text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 sm:mt-3 sm:py-2.5 sm:text-sm ${
+            className={`mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${
+              isFeatured ? "py-2.5 sm:mt-4 sm:py-3 sm:text-base" : "py-2 text-xs sm:mt-3 sm:py-2.5 sm:text-sm"
+            } ${
               added
                 ? "border-gold/60 bg-gold/20 text-gold"
                 : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"
@@ -265,7 +301,9 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
             to={`/menu/${item.id}`}
             state={linkState}
             onClick={rememberMenuScroll}
-            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gold/50 bg-gold/10 py-2 text-xs font-medium text-gold transition hover:bg-gold/20 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 sm:mt-3 sm:py-2.5 sm:text-sm"
+            className={`mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gold/50 bg-gold/10 font-medium text-gold transition hover:bg-gold/20 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${
+              isFeatured ? "py-2.5 sm:mt-4 sm:py-3 sm:text-base" : "py-2 text-xs sm:mt-3 sm:py-2.5 sm:text-sm"
+            }`}
           >
             <ChevronRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
             <span>{detailCtaLabel}</span>

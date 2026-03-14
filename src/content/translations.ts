@@ -54,6 +54,9 @@ const translations = {
       viewGrid: "Grille",
       viewList: "Liste",
       viewFeatured: "Grandes cartes",
+      seeMore: "Voir plus",
+      restantes: "restants",
+      restanteOne: "restant",
     },
     aboutPage: {
       title: "Notre histoire",
@@ -283,6 +286,9 @@ const translations = {
       viewGrid: "شبكة",
       viewList: "قائمة",
       viewFeatured: "بطاقات كبيرة",
+      seeMore: "عرض المزيد",
+      restantes: "متبقيات",
+      restanteOne: "متبقي",
     },
     aboutPage: {
       title: "قصّتنا",

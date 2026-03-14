@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { UtensilsCrossed, LayoutGrid, List, LayoutPanelTop } from "lucide-react";
+import { UtensilsCrossed, LayoutGrid, List, LayoutPanelTop, ChevronDown } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { MenuCard } from "@/components/MenuCard";
 import { useLocale } from "@/context/LocaleContext";
@@ -8,6 +8,24 @@ import { site, starredProductIds } from "@/content/site";
 
 type MenuFilter = "all" | "signatures" | "baklava" | "kunafa" | "desserts";
 type ViewMode = "grid" | "list" | "featured";
+const VIEW_STORAGE_KEY = "sultan-kunafa:menu-view";
+const VALID_VIEWS: ViewMode[] = ["grid", "list", "featured"];
+/** Tailles de page par mode (~4% en dessous de valeurs rondes). */
+const PAGE_SIZE_BY_MODE: Record<ViewMode, number> = {
+  grid: 11,
+  list: 8,
+  featured: 6,
+};
+
+function getStoredViewMode(): ViewMode {
+  try {
+    const raw = sessionStorage.getItem(VIEW_STORAGE_KEY);
+    if (raw && VALID_VIEWS.includes(raw as ViewMode)) return raw as ViewMode;
+  } catch {
+    // ignore
+  }
+  return "grid";
+}
 
 function getCategory(id: string): "baklava" | "kunafa" | "desserts" {
   if (id.startsWith("baklava_")) return "baklava";
@@ -27,7 +45,17 @@ export function Menu() {
   const { t } = useLocale();
   const { addItem } = useCart();
   const [filter, setFilter] = useState<MenuFilter>("all");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>(getStoredViewMode);
+  const [page, setPage] = useState(1);
+
+  const setViewModeAndStore = (mode: ViewMode) => {
+    setViewMode(mode);
+    try {
+      sessionStorage.setItem(VIEW_STORAGE_KEY, mode);
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     try {
@@ -64,6 +92,18 @@ export function Menu() {
     if (filter === "signatures") return menuItems.filter((item) => item.isStarred);
     return menuItems.filter((item) => item.category === filter);
   }, [menuItems, filter]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filter, viewMode]);
+
+  const pageSize = PAGE_SIZE_BY_MODE[viewMode];
+  const paginatedItems = useMemo(() => {
+    const end = page * pageSize;
+    return filteredItems.slice(0, end);
+  }, [filteredItems, page, pageSize]);
+
+  const hasMore = filteredItems.length > paginatedItems.length;
 
   return (
     <>
@@ -109,7 +149,7 @@ export function Menu() {
               <button
                 key={mode}
                 type="button"
-                onClick={() => setViewMode(mode)}
+                onClick={() => setViewModeAndStore(mode)}
                 className={`rounded-full p-2 transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream ${
                   viewMode === mode ? "bg-gold text-dark shadow-sm" : "text-dark/70 hover:bg-gold/15 hover:text-dark"
                 }`}
@@ -130,7 +170,7 @@ export function Menu() {
                 : "flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8"
           }
         >
-          {filteredItems.map((item, i) => (
+          {paginatedItems.map((item, i) => (
             <div
               key={item.id}
               className={
@@ -145,9 +185,9 @@ export function Menu() {
                 item={{ id: item.id, name: item.name, description: item.description, price: item.price, image: item.image }}
                 index={i}
                 priceAmount={item.priceAmount}
-                priority={i < 6}
+                priority={i < pageSize}
                 linkToDetail
-                layout={viewMode === "list" ? "list" : "card"}
+                layout={viewMode === "list" ? "list" : viewMode === "featured" ? "featured" : "card"}
                 detailCtaLabel={item.hasVariants ? t("menuPage.chooseFlavor") : undefined}
                 onAddToCart={
                   item.priceAmount != null
@@ -159,6 +199,22 @@ export function Menu() {
             </div>
           ))}
         </div>
+        {hasMore && (
+          <div className="mt-6 flex justify-center sm:mt-8">
+            <button
+              type="button"
+              onClick={() => setPage((p) => p + 1)}
+              className="flex items-center gap-1.5 rounded-lg border border-gold/30 bg-cream px-3.5 py-2 text-[13px] font-medium text-dark transition hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-cream dark:border-gold/40 dark:bg-cream-dark dark:text-dark dark:hover:bg-gold/15"
+              aria-label={t("menuPage.seeMore")}
+            >
+              <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
+              {t("menuPage.seeMore")} ({filteredItems.length - paginatedItems.length}{" "}
+              {(filteredItems.length - paginatedItems.length) !== 1
+                ? t("menuPage.restantes")
+                : t("menuPage.restanteOne")})
+            </button>
+          </div>
+        )}
       </section>
     </>
   );
