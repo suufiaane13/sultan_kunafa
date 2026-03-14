@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, UtensilsCrossed } from "lucide-react";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { EmptyState } from "@/components/ui";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
 
@@ -50,10 +51,17 @@ export function CartDrawer() {
 
             <div className="flex-1 overflow-y-auto px-4 py-4">
               {items.length === 0 ? (
-                <p className="flex flex-col items-center gap-2 py-12 text-center text-dark/70">
-                  <ShoppingBag className="h-12 w-12 text-gold/30" aria-hidden />
-                  {t("cart.empty")}
-                </p>
+                <EmptyState
+                  icon={<ShoppingBag className="h-12 w-12" />}
+                  description={t("cart.empty")}
+                  action={{
+                    label: t("cart.viewMenu"),
+                    to: "/menu",
+                    onClick: closeCart,
+                    leftIcon: <UtensilsCrossed className="h-4 w-4" />,
+                    variant: "secondary",
+                  }}
+                />
               ) : (
                 <ul className="space-y-4">
                   {items.map((item) => (

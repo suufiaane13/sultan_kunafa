@@ -162,9 +162,12 @@ html::-webkit-scrollbar-thumb:active {
   animation: cart-bump 0.45s ease-out;
 }
 
-/* Supprime tout contour/ring au focus (boutons, liens, etc.) */
-*:focus,
+/* Clic souris : pas de contour. Tab (clavier) : contour or pour voir l’élément sélectionné */
+*:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
 *:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }

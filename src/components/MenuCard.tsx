@@ -5,6 +5,7 @@ import { ShoppingCart, Check, Heart, ChevronRight, Star } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { starredProductIds } from "@/content/site";
 import { useFavorites } from "@/context/FavoritesContext";
+import { DEFAULT_PRODUCT_IMAGE, webpUrl, webpSrcSet } from "@/lib/imageUtils";
 
 export interface MenuItem {
   id: string;
@@ -30,28 +31,6 @@ interface MenuCardProps {
   detailCtaLabel?: string;
   /** Affichage liste : image à gauche. Grandes cartes : image + typo premium. */
   layout?: "card" | "list" | "featured";
-}
-
-const DEFAULT_PRODUCT_IMAGE = "/photos/photo.png";
-
-/** Base URL sans extension (ex. /photos/kunafa_nutella). */
-function imageBase(path: string): string | null {
-  if (!path || path === DEFAULT_PRODUCT_IMAGE) return null;
-  const match = path.match(/\.(png|jpe?g)$/i);
-  return match ? path.slice(0, -match[0].length) : null;
-}
-
-/** URL WebP (après npm run optimize-images). */
-function webpUrl(path: string): string | null {
-  const base = imageBase(path);
-  return base ? base + ".webp" : null;
-}
-
-/** srcset WebP responsive pour les photos du menu (400w, 800w, 1200w). */
-function webpSrcSet(path: string): string | null {
-  const base = imageBase(path);
-  if (!base || !base.startsWith("/photos/")) return null;
-  return `${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1200w`;
 }
 
 export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority = false, linkToDetail = false, linkState, detailCtaLabel, layout = "card" }: MenuCardProps) {
@@ -149,7 +128,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
             to={`/menu/${item.id}`}
             state={linkState}
             onClick={rememberMenuScroll}
-            className="flex h-full w-full items-center justify-center"
+            className={`flex h-full w-full items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-inset focus-visible:ring-offset-0 ${isList ? "rounded-l-xl md:rounded-l-2xl" : "rounded-t-xl md:rounded-t-2xl"}`}
           >
             {webpSrc ? (
               <picture>
@@ -238,6 +217,7 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
               to={`/menu/${item.id}`}
               state={linkState}
               onClick={rememberMenuScroll}
+              tabIndex={-1}
               className="min-w-0 flex-1 sm:flex-1"
             >
               <h3
@@ -276,7 +256,9 @@ export function MenuCard({ item, index = 0, priceAmount, onAddToCart, priority =
           <button
             type="button"
             onClick={handleAdd}
-            className={`mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${
+            disabled={added}
+            aria-busy={added}
+            className={`mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border font-medium transition focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-90 ${
               isFeatured ? "py-2.5 sm:mt-4 sm:py-3 sm:text-base" : "py-2 text-xs sm:mt-3 sm:py-2.5 sm:text-sm"
             } ${
               added

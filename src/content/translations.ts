@@ -15,6 +15,7 @@ const translations = {
       menu: "Menu",
       favorites: "Favoris",
       about: "Notre histoire",
+      skipToContent: "Aller au contenu principal",
     },
     navDrawer: {
       title: "Navigation",
@@ -26,6 +27,7 @@ const translations = {
       subtitle: "Retrouvez ici vos produits préférés.",
       emptyTitle: "Aucun favori pour le moment",
       emptyHint: "Appuyez sur le cœur d’un produit pour l’ajouter ici.",
+      discoverMenu: "Découvrir le menu",
     },
     hero: {
       title: "SWEETŞ",
@@ -57,6 +59,8 @@ const translations = {
       seeMore: "Voir plus",
       restantes: "restants",
       restanteOne: "restant",
+      noResults: "Aucun produit pour ce filtre.",
+      resetFilters: "Réinitialiser les filtres",
     },
     aboutPage: {
       title: "Notre histoire",
@@ -90,6 +94,7 @@ const translations = {
       title: "Mon panier",
       close: "Fermer le panier",
       empty: "Votre panier est vide.",
+      viewMenu: "Voir le menu",
       addedToCart: "Ajouté au panier",
       decrease: "Diminuer",
       increase: "Augmenter",
@@ -100,6 +105,10 @@ const translations = {
     footer: {
       copyright: "Tous droits réservés.",
     },
+    pwa: {
+      addToHomeScreen: "Ajouter à l'écran d'accueil",
+      dismiss: "Plus tard",
+    },
     notFound: {
       title: "Page introuvable",
       message: "Cette page n'existe pas ou a été déplacée.",
@@ -107,6 +116,10 @@ const translations = {
     },
     gestionVente: {
       title: "Gestion des ventes",
+      gateTitle: "Accès réservé",
+      gatePlaceholder: "Code d'accès",
+      gateSubmit: "Accéder",
+      gateError: "Code incorrect",
       back: "Retour",
       lastSale: "Dernière vente",
       caMonth: "CA du mois",
@@ -248,6 +261,7 @@ const translations = {
       menu: "القائمة",
       favorites: "المفضلة",
       about: "قصّتنا",
+      skipToContent: "الانتقال إلى المحتوى الرئيسي",
     },
     navDrawer: {
       title: "التنقل",
@@ -259,6 +273,7 @@ const translations = {
       subtitle: "ستجد هنا منتجاتك المفضلة.",
       emptyTitle: "لا توجد قائمة مفضلة بعد",
       emptyHint: "اضغط على أيقونة القلب لإضافة المنتج هنا.",
+      discoverMenu: "اكتشف القائمة",
     },
     hero: {
       title: "سويتس",
@@ -289,6 +304,8 @@ const translations = {
       seeMore: "عرض المزيد",
       restantes: "متبقيات",
       restanteOne: "متبقي",
+      noResults: "لا يوجد منتج لهذا التصفية.",
+      resetFilters: "إعادة تعيين التصفية",
     },
     aboutPage: {
       title: "قصّتنا",
@@ -322,6 +339,7 @@ const translations = {
       title: "سلّتي",
       close: "إغلاق السلة",
       empty: "سلّتك فارغة.",
+      viewMenu: "عرض القائمة",
       addedToCart: "أُضيف إلى السلة",
       decrease: "تقليل",
       increase: "زيادة",
@@ -332,6 +350,10 @@ const translations = {
     footer: {
       copyright: "جميع الحقوق محفوظة.",
     },
+    pwa: {
+      addToHomeScreen: "إضافة إلى الشاشة الرئيسية",
+      dismiss: "لاحقاً",
+    },
     notFound: {
       title: "الصفحة غير موجودة",
       message: "هذه الصفحة غير موجودة أو تم نقلها.",
@@ -339,6 +361,10 @@ const translations = {
     },
     gestionVente: {
       title: "إدارة المبيعات",
+      gateTitle: "وصول محظور",
+      gatePlaceholder: "رمز الدخول",
+      gateSubmit: "دخول",
+      gateError: "الرمز غير صحيح",
       back: "رجوع",
       lastSale: "آخر عملية بيع",
       caMonth: "مبيعات الشهر",

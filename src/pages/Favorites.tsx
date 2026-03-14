@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
+import { Heart, UtensilsCrossed } from "lucide-react";
 import { MenuCard } from "@/components/MenuCard";
+import { EmptyState } from "@/components/ui";
 import { useFavorites } from "@/context/FavoritesContext";
 import { useLocale } from "@/context/LocaleContext";
 import { site } from "@/content/site";
@@ -43,17 +44,24 @@ export function Favorites() {
       <section className="mx-auto max-w-7xl px-3 py-8 sm:px-4 sm:py-10 md:py-12" aria-label={t("nav.favorites")}>
         {favoriteItems.length === 0 ? (
           <motion.section
-            className="mx-auto max-w-4xl px-4 py-16 text-center md:py-24"
+            className="mx-auto max-w-4xl px-4 md:py-24"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             aria-labelledby="favorites-empty-heading"
           >
-            <h2 id="favorites-empty-heading" className="font-display text-3xl font-semibold text-dark md:text-4xl">
-              {t("favorites.emptyTitle")}
-            </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-dark/90">
-              {t("favorites.emptyHint")}
-            </p>
+            <EmptyState
+              icon={<Heart className="h-12 w-12" />}
+              title={t("favorites.emptyTitle")}
+              description={t("favorites.emptyHint")}
+              titleId="favorites-empty-heading"
+              action={{
+                label: t("favorites.discoverMenu"),
+                to: "/menu",
+                leftIcon: <UtensilsCrossed className="h-4 w-4" />,
+                variant: "gold",
+              }}
+              className="py-16"
+            />
           </motion.section>
         ) : (
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8">

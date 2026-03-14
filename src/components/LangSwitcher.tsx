@@ -31,7 +31,7 @@ export function LangSwitcher({ variant = "navbar", overHero = false }: LangSwitc
   ].join(" ");
 
   const labelClass = (isActive: boolean) => {
-    const base = "relative z-10 flex h-full flex-1 items-center justify-center font-semibold leading-none transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-cream)]";
+    const base = "relative z-10 flex h-full flex-1 items-center justify-center font-semibold leading-none transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-cream)] rounded-full";
     const size = isCompact ? "min-w-0 text-xs" : "min-w-0 text-sm";
     /* Actif = texte blanc sur le curseur or (le « truc jaune ») */
     if (isActive) return `${base} ${size} text-white cursor-default drop-shadow-sm`;

@@ -33,14 +33,14 @@ export function LanguagePicker() {
             <button
               type="button"
               onClick={() => setLocale("fr")}
-              className="w-full rounded-xl border-2 border-gold/50 bg-gold/10 py-4 font-semibold text-dark transition hover:bg-gold/20 focus:outline-none focus:ring-2 focus:ring-gold"
+              className="w-full rounded-xl border-2 border-gold/50 bg-gold/10 py-4 font-semibold text-dark transition hover:bg-gold/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
             >
               {t("picker.fr")}
             </button>
             <button
               type="button"
               onClick={() => setLocale("ar")}
-              className="w-full rounded-xl border-2 border-gold/50 bg-gold/10 py-4 font-semibold text-dark transition hover:bg-gold/20 focus:outline-none focus:ring-2 focus:ring-gold"
+              className="w-full rounded-xl border-2 border-gold/50 bg-gold/10 py-4 font-semibold text-dark transition hover:bg-gold/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
               dir="rtl"
               lang="ar"
             >

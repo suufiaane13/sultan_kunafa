@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
@@ -18,7 +19,7 @@ export function Hero() {
         width={1920}
         height={1080}
         loading="eager"
-        fetchPriority="high"
+        {...({ fetchpriority: "high" } as ComponentProps<"img">)}
         draggable={false}
         onContextMenu={(e) => e.preventDefault()}
         aria-hidden
@@ -70,7 +71,7 @@ export function Hero() {
         >
           <Link
             to="/menu"
-            className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-4 font-semibold text-dark shadow-lg transition hover:bg-gold-light focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-4 font-semibold text-dark shadow-lg transition hover:bg-gold-light focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
             data-ga-event="menu_click"
           >
             {t("hero.ctaLabel")}

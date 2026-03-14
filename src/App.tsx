@@ -8,6 +8,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { SplashScreen } from "@/components/SplashScreen";
 import { CartDrawer } from "@/components/CartDrawer";
 import { FloatingSocial } from "@/components/FloatingSocial";
+import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LanguagePicker } from "@/components/LanguagePicker";
@@ -20,6 +21,7 @@ const MenuItemPage = lazy(() => import("@/pages/MenuItemPage").then((m) => ({ de
 const Favorites = lazy(() => import("@/pages/Favorites").then((m) => ({ default: m.Favorites })));
 const About = lazy(() => import("@/pages/About").then((m) => ({ default: m.About })));
 const GestionVente = lazy(() => import("@/gestion-vente/GestionVentePage").then((m) => ({ default: m.GestionVentePage })));
+const GestionGate = lazy(() => import("@/gestion-vente/GestionGate").then((m) => ({ default: m.GestionGate })));
 
 function AppContent() {
   return (
@@ -43,6 +45,7 @@ function AppContent() {
       </div>
       <CartDrawer />
       <FloatingSocial />
+      <PWAInstallBanner />
       <LanguagePicker />
     </>
   );
@@ -70,7 +73,7 @@ function App() {
           <FavoritesProvider>
             <CartProvider>
               <Routes>
-                <Route path="/gestion" element={<Suspense fallback={<RouteSkeleton />}><GestionVente /></Suspense>} />
+                <Route path="/gestion" element={<Suspense fallback={<RouteSkeleton />}><GestionGate><GestionVente /></GestionGate></Suspense>} />
                 <Route path="*" element={<AppContent />} />
               </Routes>
             </CartProvider>

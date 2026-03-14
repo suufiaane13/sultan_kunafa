@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { UtensilsCrossed, LayoutGrid, List, LayoutPanelTop, ChevronDown } from "lucide-react";
+import { UtensilsCrossed, LayoutGrid, List, LayoutPanelTop, ChevronDown, Search } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { MenuCard } from "@/components/MenuCard";
+import { EmptyState } from "@/components/ui";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart } from "@/context/CartContext";
 import { site, starredProductIds } from "@/content/site";
@@ -47,6 +48,7 @@ export function Menu() {
   const [filter, setFilter] = useState<MenuFilter>("all");
   const [viewMode, setViewMode] = useState<ViewMode>(getStoredViewMode);
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const setViewModeAndStore = (mode: ViewMode) => {
     setViewMode(mode);
@@ -87,15 +89,25 @@ export function Menu() {
     };
   }), [t]);
 
-  const filteredItems = useMemo(() => {
+  const filteredByCategory = useMemo(() => {
     if (filter === "all") return menuItems;
     if (filter === "signatures") return menuItems.filter((item) => item.isStarred);
     return menuItems.filter((item) => item.category === filter);
   }, [menuItems, filter]);
 
+  const filteredItems = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return filteredByCategory;
+    return filteredByCategory.filter(
+      (item) =>
+        item.name.toLowerCase().includes(q) ||
+        (item.description && item.description.toLowerCase().includes(q))
+    );
+  }, [filteredByCategory, searchQuery]);
+
   useEffect(() => {
     setPage(1);
-  }, [filter, viewMode]);
+  }, [filter, viewMode, searchQuery]);
 
   const pageSize = PAGE_SIZE_BY_MODE[viewMode];
   const paginatedItems = useMemo(() => {
@@ -120,6 +132,24 @@ export function Menu() {
       </motion.header>
 
       <section className="mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8 md:py-10" aria-label={t("menuPage.title")}>
+        <div className="mb-4 flex justify-center sm:mb-6">
+          <label htmlFor="menu-search" className="sr-only">
+            {t("menuPage.filterSearchPlaceholder")}
+          </label>
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark/50 rtl:left-auto rtl:right-3" aria-hidden />
+            <input
+              id="menu-search"
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t("menuPage.filterSearchPlaceholder")}
+              className="w-full rounded-xl border border-gold/30 bg-cream py-2.5 pl-10 pr-4 text-dark placeholder:text-dark/50 focus:border-gold/60 rtl:pl-4 rtl:pr-10 dark:border-gold/40 dark:bg-cream-dark"
+              autoComplete="off"
+              aria-label={t("menuPage.filterSearchPlaceholder")}
+            />
+          </div>
+        </div>
         <div className="mb-6 flex flex-wrap items-center justify-center gap-2 sm:mb-8 sm:gap-3" role="tablist" aria-label={t("menuPage.title")}>
           {FILTERS.map(({ value, labelKey }) => (
             <button
@@ -161,6 +191,19 @@ export function Menu() {
             ))}
           </div>
         </div>
+        {filteredItems.length === 0 ? (
+          <EmptyState
+            icon={<UtensilsCrossed className="h-12 w-12" />}
+            description={t("menuPage.noResults")}
+            action={{
+              label: t("menuPage.resetFilters"),
+              onClick: () => setFilter("all"),
+              variant: "secondary",
+            }}
+            className="mx-auto max-w-xl py-16 sm:py-20"
+          />
+        ) : (
+          <>
         <div
           className={
             viewMode === "list"
@@ -214,6 +257,8 @@ export function Menu() {
                 : t("menuPage.restanteOne")})
             </button>
           </div>
+        )}
+          </>
         )}
       </section>
     </>

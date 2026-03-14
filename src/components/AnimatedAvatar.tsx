@@ -4,7 +4,7 @@
  * Respecte prefers-reduced-motion.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const FRAME_COUNT = 151;
 const FRAME_STEP = 3;
@@ -44,8 +44,6 @@ export function AnimatedAvatar({
 }: AnimatedAvatarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const onLoadCalledRef = useRef(false);
 
   const cacheRef = useRef<Map<number, HTMLImageElement>>(new Map());
@@ -57,26 +55,7 @@ export function AnimatedAvatar({
   // Frames désactivées pour l’instant : on n’affiche que la photo statique
   const useAnimation = false;
 
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mq.matches);
-    const handler = () => setPrefersReducedMotion(mq.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => setInView(entries[0]?.isIntersecting ?? false),
-      { threshold: 0.2, rootMargin: "50px" }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  // Précharger les premières frames au démarrage
+  // Précharger les premières frames (inactif tant que useAnimation = false)
   useEffect(() => {
     if (!useAnimation) return;
     const cache = cacheRef.current;

@@ -6,6 +6,9 @@ Page **réservée aux fondateurs** pour enregistrer et suivre les ventes au jour
 
 - **URL** : `https://votre-site.netlify.app/gestion` (ou `http://localhost:5173/gestion` en local)
 - La page n’apparaît **ni dans le menu ni dans le footer** du site public. Il faut connaître l’URL ou la mettre en favori.
+- **Code d’accès** : à l’ouverture de `/gestion`, un formulaire demande un code PIN. Une fois correct, l’accès est mémorisé 24 h (session du navigateur).
+  - **Sans configuration** : le code par défaut est `gestion` (à changer en production).
+  - **Avec configuration** : créez un fichier `.env` à la racine du projet avec `VITE_GESTION_PIN=votre_code_secret`. En production (ex. Netlify), définissez la variable d’environnement `VITE_GESTION_PIN` dans les paramètres du projet.
 
 ## Fonctionnalités
 
@@ -30,6 +33,7 @@ Page **réservée aux fondateurs** pour enregistrer et suivre les ventes au jour
 
 ## Sécurité
 
-- Aucun mot de passe pour l’instant. Toute personne qui connaît l’URL peut accéder à la page.
-- Pour restreindre l’accès en production, vous pouvez utiliser :
-  - **Netlify** : Protection par mot de passe (option payante) ou « Password protection » sur un sous-dossier si vous déplacez la gestion sur un sous-domaine.
+- **Code PIN côté client** : l’accès à `/gestion` est protégé par un formulaire (code PIN). La vérification se fait dans le navigateur (pas de serveur). Cela évite un accès par curiosité ; quelqu’un qui connaît l’URL et le code peut entrer.
+- Pour un verrouillage plus fort (vrai mot de passe, expiration, etc.), il faudrait un backend ou une protection au niveau de l’hébergeur :
+  - **Netlify** : « Password protection » (option payante) ou « Protect deploy » sur une branche.
+  - **Backend** : authentification côté serveur + session.
