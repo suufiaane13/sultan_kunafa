@@ -54,7 +54,8 @@ export function AnimatedAvatar({
   const rafRef = useRef<number>(0);
   const lastTickRef = useRef(0);
 
-  const useAnimation = inView && !prefersReducedMotion;
+  // Frames désactivées pour l’instant : on n’affiche que la photo statique
+  const useAnimation = false;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
